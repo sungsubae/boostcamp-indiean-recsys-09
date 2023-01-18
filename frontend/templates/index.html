@@ -1,0 +1,240 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <style>
+        .slides>input[name=ra] {
+            display: none;
+        }
+
+        .slides {
+            width: 300px;
+            display: flex;
+            overflow: hidden;
+        }
+
+        .sl {
+            position: relative;
+            transition: 1s;
+        }
+
+        #ra01:checked~.sl {
+            left: 0;
+        }
+
+        #ra02:checked~.sl {
+            left: -100%;
+        }
+
+        #ra03:checked~.sl {
+            left: -100%;
+        }
+
+        #ra04:checked~.sl {
+            left: -300%;
+        }
+
+        .page {
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+    <title>스팀게임추천</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}" />
+    <noscript>
+        <link rel="stylesheet" href="{{ url_for('static', path='/css/noscript.css') }}" /></noscript>
+</head>
+
+<body>
+    <header id="header">
+
+        <div style="border: 1px solid rgb(255, 255, 255); float: left; width: 20%;">
+            <a href="index.html">
+                <h1>LOGO</h1>
+            </a>
+        </div>
+        <div style="border: 1px solid rgb(255, 255, 255); float: left; width: 20%;">
+            Menu1
+        </div>
+        <div style="border: 1px solid rgb(255, 255, 255); float: left; width: 20%;">
+            Menu2
+        </div>
+        <div style="border: 1px solid rgb(255, 255, 255); float: left; width: 20%;">
+            Menu3
+        </div>
+
+
+    </header>
+
+    <!-- Search -->
+    <section>
+        <a href="./login">
+            <input type="submit" value="로그인">
+        </a>
+            
+    </section>
+ 
+    <section>
+        <div class="slide">
+
+            <div class="slides">
+                <input type="radio" id="ra01" name="ra" value="" checked>
+                <input type="radio" id="ra02" name="ra" value="">
+                <input type="radio" id="ra03" name="ra" value="">
+                <input type="radio" id="ra04" name="ra" value="">
+
+                <div class="sl">
+                    <img src="http://via.placeholder.com/300/000000/ffffff ?text=content1" alt="">
+                </div>
+
+                <div class="sl">
+                    <img src="http://via.placeholder.com/300/550000/ffffff ?text=content2" alt="">
+                </div>
+
+                <div class="sl">
+                    <img src="http://via.placeholder.com/300/aa0000/ffffff ?text=content3" alt="">
+                </div>
+
+                <div class="sl">
+                    <img src="http://via.placeholder.com/300/ff0000/ffffff ?text=content4" alt="">
+                </div>
+
+            </div>
+
+            <div class="page">
+                <label for="ra01">●</label>
+                <label for="ra02">●</label>
+                <label for="ra03">●</label>
+                <label for="ra04">●</label>
+            </div>
+
+    </section>
+
+
+    <!-- Main -->
+    <section id="main">
+
+        <h2>
+            추천게임(룰베이스)
+        </h2>
+
+        <!-- Items -->
+        <div class="items">
+
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Kingdom of the Wind</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/05.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">The Pursuit</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/06.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Boundless</h2><a href="http://0.0.0.0:8000/gamepage"<img
+                        src="images/thumbs/07.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">The Spectators</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/08.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">You really got me</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/01.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Ad Infinitum</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/02.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Different.</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/03.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Kingdom of the Wind</h2><a href="http://0.0.0.0:8000/gamepage" ><img
+                        src="images/thumbs/05.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Elysium</h2><a href="http://0.0.0.0:8000/gamepage" ><img
+                        src="images/thumbs/04.jpg" alt=""></a>
+            </article>
+
+        </div>
+
+
+        <h2>
+            신규게임
+        </h2>
+
+        <!-- Items -->
+        <div class="items">
+
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Kingdom of the Wind</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/05.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">The Pursuit</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/06.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Boundless</h2><a href="http://0.0.0.0:8000/gamepage"<img
+                        src="images/thumbs/07.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">The Spectators</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/08.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">You really got me</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/01.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Ad Infinitum</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/02.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Different.</h2><a href="http://0.0.0.0:8000/gamepage"><img
+                        src="images/thumbs/03.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Kingdom of the Wind</h2><a href="http://0.0.0.0:8000/gamepage" ><img
+                        src="images/thumbs/05.jpg" alt=""></a>
+            </article>
+            <article class="item thumb span-1">
+                <h2 style="color: azure;">Elysium</h2><a href="http://0.0.0.0:8000/gamepage" ><img
+                        src="images/thumbs/04.jpg" alt=""></a>
+            </article>
+
+        </div>
+
+        <h2>
+            <br>
+            <br>
+            <br>
+            기능추가-1
+            <br>
+            <br>
+            <br>
+            기능추가-2
+            <br>
+            <br>
+            <br>
+            
+        </h2>
+        
+    </div>
+
+    <!-- Scripts -->
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/jquery.poptrox.min.js"></script>
+    <script src="../static/js/browser.min.js"></script>
+    <script src="../static/js/breakpoints.min.js"></script>
+    <script src="../static/js/util.js"></script>
+    <script src="../static/js/main.js"></script>
+
+
+</body>
+
+</html>
