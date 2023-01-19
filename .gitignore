@@ -6,3 +6,6 @@ assets/
 *.db
 config.yaml
 test.ipynb
+
+# 실행파일
+Makefile

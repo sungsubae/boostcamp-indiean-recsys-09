@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 import pydantic
 from typing import Optional
 
-from core.setting import config
+from backend.api.core.setting import config
 
 if config.env == "dev":
     import pandas as pd
