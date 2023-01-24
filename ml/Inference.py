@@ -20,7 +20,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-from no1 import NeuMF
+from Inference import NeuMF
 
 def dataload():
     credential_path = 'key.json'
