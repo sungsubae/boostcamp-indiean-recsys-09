@@ -14,14 +14,12 @@ class GameInDB(BaseModel):
     tags : List[str]
     types : List[str]
     categories : List[str]
-    owners : str
     positive_review : int
     negative_review : int
     price : float
     initial_price : float
     discount : float
-    ccu : int
-    languages : str
+    languages : List[str]
     platforms : List[str]
     release_date : datetime
     required_age : int
@@ -41,14 +39,12 @@ class Game(BaseModel):
     tags : List[str]
     types : List[str]
     categories : List[str]
-    owners : str
     positive_review : int
     negative_review : int
     price : float
     initial_price : float
     discount : float
-    ccu : int
-    languages : str
+    languages : List[str]
     platforms : List[str]
     release_date : datetime
     required_age : int
