@@ -10,10 +10,10 @@ class GameInDB(BaseModel):
     decription : str
     developer : str
     publisher : str
-    genres : str
-    tags : str
-    types : str
-    categories : str
+    genres : List[str]
+    tags : List[str]
+    types : List[str]
+    categories : List[str]
     owners : str
     positive_review : int
     negative_review : int
@@ -22,7 +22,7 @@ class GameInDB(BaseModel):
     discount : float
     ccu : int
     languages : str
-    platforms : str
+    platforms : List[str]
     release_date : datetime
     required_age : int
     header_image : str
@@ -37,10 +37,10 @@ class Game(BaseModel):
     decription : str
     developer : str
     publisher : str
-    genres : str
-    tags : str
-    types : str
-    categories : str
+    genres : List[str]
+    tags : List[str]
+    types : List[str]
+    categories : List[str]
     owners : str
     positive_review : int
     negative_review : int
@@ -49,7 +49,7 @@ class Game(BaseModel):
     discount : float
     ccu : int
     languages : str
-    platforms : str
+    platforms : List[str]
     release_date : datetime
     required_age : int
     header_image : str

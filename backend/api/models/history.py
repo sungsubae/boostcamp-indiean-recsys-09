@@ -8,8 +8,8 @@ class HistoryTable(Base):
     __tablename__ = "history"
 
     id = Column(BigInteger, primary_key=True, index=True)
-    userid = Column(BigInteger, ForeignKey("user.userid"))
-    appid = Column(Integer, ForeignKey("game.appid"))
+    userid = Column(BigInteger, ForeignKey("users.id"))
+    appid = Column(Integer, ForeignKey("game.id"))
     playtime_total = Column(Float)
     rtime_last_played = Column(DateTime)
 

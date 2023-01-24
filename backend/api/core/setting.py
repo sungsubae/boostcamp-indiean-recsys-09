@@ -15,9 +15,16 @@ class SteamConfig(BaseSettings):
 
 
 class DBConfig(BaseSettings):
-    url: str = Field(default="sqlite:///./sql_app.db", env="db")
+    base: str = Field(default="postgresql://", env="db")
     user: str = Field(default=None, env="db")
     password: str = Field(default=None, env="db")
+    ip: str = Field(default="localhost", env="db")
+    port: str = Field(default="5432", env="db")
+    database: str = Field(default="database", env="db")
+
+    @property
+    def url(self) -> str:
+        return f"{self.base}{self.user}:{self.password}@{self.ip}:{self.port}/{self.database}"
 
 
 class AppConfig(BaseSettings):
