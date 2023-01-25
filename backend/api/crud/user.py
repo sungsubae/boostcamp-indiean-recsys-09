@@ -15,12 +15,12 @@ def get_user_list(db:Session):
 def get_user(db:Session, user_id: int):
     u = db.query(UserTable)\
         .filter(UserTable.id == user_id)\
-        .all()
+        .first()
     
-    if len(u) == 0:
+    if u is None:
         return False
     else:
-        return u[0]
+        return u
 
 def add_user(db:Session, new_user:UserCreate):
     db_user = UserTable(id=new_user.id,

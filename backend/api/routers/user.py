@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from typing import List
+from typing import List, Union
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -19,6 +19,6 @@ def user_list(db: Session=Depends(get_db)) -> List[UserInDB]:
 
 
 @router.get("/{user_id}")
-def user_by_id( user_id: int, db: Session=Depends(get_db)) -> UserInDB:
+def user_by_id( user_id: int, db: Session=Depends(get_db)) -> Union[UserInDB, bool]:
     _user = user.get_user(db, user_id)
     return _user
