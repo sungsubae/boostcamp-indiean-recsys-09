@@ -1,5 +1,5 @@
 from sqlalchemy import Column, DateTime, ForeignKey, BigInteger, Integer, ARRAY
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 
 from core.database import Base
 
@@ -11,3 +11,5 @@ class RecommendTable(Base):
     userid = Column(BigInteger, ForeignKey("users.id"))
     games = Column(ARRAY(Integer))
     time_created = Column(DateTime)
+
+    user = relationship("UserTable", backref=backref("recommend"))
