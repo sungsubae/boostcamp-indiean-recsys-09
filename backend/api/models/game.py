@@ -9,7 +9,7 @@ class GameTable(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
-    decription = Column(String)
+    decription = Column(Text)
     developer = Column(String)
     publisher = Column(String)
     genres = Column(ARRAY(String))

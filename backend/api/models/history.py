@@ -9,7 +9,7 @@ class HistoryTable(Base):
 
     id = Column(BigInteger, primary_key=True, index=True)
     userid = Column(BigInteger, ForeignKey("users.id"))
-    appid = Column(Integer, ForeignKey("game.id"))
+    gameid = Column(Integer, ForeignKey("game.id"))
     playtime_total = Column(Float)
     rtime_last_played = Column(DateTime)
     create_time = Column(DateTime)
