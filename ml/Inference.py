@@ -92,8 +92,8 @@ def filter(pred, filtering):
 
 def main():
     start = time.time()
-    userid = 76561198117856251
-    api =  "F644C6E2851DBDC938FF6FC70388451F"
+    userid = "userid"
+    api =  "apikey"
     origin, n_items,filtering = dataload()
     test , item_encoder = get_user(api, userid, origin)
     model = get_model('../model/bestmodel_{}.pth'.format(datetime.now().day), n_items)
