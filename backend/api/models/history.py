@@ -12,6 +12,7 @@ class HistoryTable(Base):
     appid = Column(Integer, ForeignKey("game.id"))
     playtime_total = Column(Float)
     rtime_last_played = Column(DateTime)
+    create_time = Column(DateTime)
 
     user = relationship("UserTable", backref=backref("history"))
     game = relationship("GameTable", backref=backref("history"))

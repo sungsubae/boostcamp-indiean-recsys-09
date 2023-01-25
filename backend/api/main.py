@@ -8,6 +8,8 @@ import pydantic
 from typing import Optional
 
 from core.setting import config
+from routers import user
+
 
 if config.env == "dev":
     import pandas as pd
@@ -18,7 +20,7 @@ if config.env == "dev":
 
 app = FastAPI()
 templates = Jinja2Templates(directory='./')
-
+app.include_router(user.router)
 
 @app.get("/")
 def get_root():
