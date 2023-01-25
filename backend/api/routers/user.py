@@ -16,3 +16,9 @@ router = APIRouter(
 def user_list(db: Session=Depends(get_db)) -> List[UserInDB]:
     _user_list = user.get_user_list(db)
     return _user_list
+
+
+@router.get("/{user_id}")
+def user_by_id( user_id: int, db: Session=Depends(get_db)) -> UserInDB:
+    _user = user.get_user(db, user_id)
+    return _user

@@ -29,7 +29,7 @@ def get_root():
 
 @app.get("/favicon.ico", include_in_schema=False)
 def get_favicon():
-    return FileResponse('asset/favicon.ico')
+    return FileResponse('assets/favicon.ico')
 
 
 @app.get("/login")
