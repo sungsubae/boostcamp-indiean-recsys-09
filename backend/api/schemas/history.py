@@ -7,7 +7,7 @@ from typing import List
 class HistoryInDB(BaseModel):
     id: int
     userid: int
-    appid: int
+    gameid: int
     playtime_total: float
     rtime_last_played: datetime
     create_time: datetime
@@ -18,10 +18,23 @@ class HistoryInDB(BaseModel):
 
 class History(BaseModel):
     userid: int
-    appid: int
+    gameid: int
     playtime_total: float
     rtime_last_played: datetime
     create_time: datetime
+
+    @validator('userid','appid','playtime_total')
+    def not_none(cls, v):
+        if not v:
+            raise ValueError(f"{cls}에 빈 값은 허용되지 않습니다.")
+        return v
+
+
+class HistoryCreate(BaseModel):
+    userid: int
+    appid: int
+    playtime_total: float
+    rtime_last_played: datetime
 
     @validator('userid','appid','playtime_total')
     def not_none(cls, v):
