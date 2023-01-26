@@ -7,12 +7,11 @@ from typing import List
 class GameInDB(BaseModel):
     id : int
     name : str
-    decription : str
+    description : str
     developer : str
     publisher : str
     genres : List[str]
     tags : List[str]
-    types : List[str]
     categories : List[str]
     positive_review : int
     negative_review : int
@@ -32,12 +31,11 @@ class GameInDB(BaseModel):
 class Game(BaseModel):
     id : int
     name : str
-    decription : str
+    description : str
     developer : str
     publisher : str
     genres : List[str]
     tags : List[str]
-    types : List[str]
     categories : List[str]
     positive_review : int
     negative_review : int
