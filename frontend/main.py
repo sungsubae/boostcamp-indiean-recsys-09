@@ -1,46 +1,40 @@
-from fastapi import FastAPI, Form, Request
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, Request, Form
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
+from starlette.middleware import Middleware
+from starlette.middleware.sessions import SessionMiddleware
+import typing
 import uvicorn
-import requests
-import os
-app=FastAPI()
-global steam_id
 
-BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR,"static")), name="static")
-templates=Jinja2Templates(directory=os.path.join(BASE_DIR,"templates"))
+def flash(request: Request, message: typing.Any) -> None:
+   if "_messages" not in request.session:
+       request.session["_messages"] = []
+       request.session["_messages"].append({"message": message})
+def get_flashed_messages(request: Request):
+   print(request.session)
+   return request.session.pop("_messages") if "_messages" in request.session else []
 
-@app.get("/")
-def index(request: Request):
-    return templates.TemplateResponse('index.html', context={"request":request})
+middleware = [
+ Middleware(SessionMiddleware, secret_key='super-secret')
+]
+app = FastAPI(middleware=middleware)
 
-@app.get("/login")
-def loginpage(request: Request):
-    return templates.TemplateResponse('login.html', context={"request":request})
-
-@app.get("/login2")
-def login2(request: Request):
-    steam_id=request.query_params['openid.identity'][-17:]
-    return templates.TemplateResponse('login2.html', context={"request":request,"steam_id":steam_id})
-
-@app.get("/mypage")
-async def mypage(request: Request):
-    return templates.TemplateResponse('mypage.html', context={"request":request})
+app.mount("/static/", StaticFiles(directory='static', html=True), name="static")
+templates = Jinja2Templates(directory="templates")
+templates.env.globals['get_flashed_messages'] = get_flashed_messages
 
 
-@app.get("/userpage")
-def get_login_form(request: Request):
-    return templates.TemplateResponse('userpage.html', context={"request":request})
+@app.get("/login/", response_class=HTMLResponse)
+async def login_form(request: Request):
+   return templates.TemplateResponse("login.html", {"request": request})
 
-@app.get("/gamepage")
-def get_login_form(request: Request):
-    return templates.TemplateResponse('gamepage.html', context={"request":request})
+@app.post("/login/", response_class=HTMLResponse)
+async def login(request: Request, username: str = Form(...), password: str = Form(...)):
+   if username == "test" and password == "test":
+       flash(request, "Login Successful")
+       return templates.TemplateResponse("login.html", {"request": request})
+   flash(request, "Failed to login")
+   return templates.TemplateResponse("login.html", {"request": request})
 
 
-################################################################################
-
-
-
-# if __name__=="__main__":
-#     uvicorn.run(app, host="0.0.0.0", port=8000)
