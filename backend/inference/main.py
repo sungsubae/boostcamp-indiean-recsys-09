@@ -18,7 +18,8 @@ from fastapi.templating import Jinja2Templates
 from datetime import datetime
 from pandas import DataFrame
 
-from ml.inference import NeuMF, get_model, get_user, get_model_rec_prototype, inference_
+from ml.Inference import get_model, get_user, get_model_rec, inference_
+from ml.model import NueMF
 
 ############################################################
 ############### model & inference import 필요 #####################
@@ -27,17 +28,23 @@ from ml.inference import NeuMF, get_model, get_user, get_model_rec_prototype, in
 ############################################################
 
 app = FastAPI()
-templates = Jinja2Templates(directory = 'frontend/templates')
+# templates = Jinja2Templates(directory = 'frontend/templates')
 
 ##############Login#########################################
 
-@app.get("/login/")
-def get_login_form(request: Request):
-    return templates.TemplateResponse('login_form.html', context = {"request" : request})
+'''
 
-@app.post("/login/")
-def login(username: str = Form(...), password : str = Form(...)):
-    return {"username": username}
+Login Part -> Backend Part로 전향
+
+'''
+
+# @app.get("/login/")
+# def get_login_form(request: Request):
+#     return templates.TemplateResponse('login_form.html', context = {"request" : request})
+
+# @app.post("/login/")
+# def login(username: str = Form(...), password : str = Form(...)):
+#     return {"username": username}
 
 ##############class 정의 및 ###################################
 
@@ -60,7 +67,7 @@ class RecSteamProduct(BaseModel):
 
 class inferenceSteamProduct(Product):
     name: str = "inference_steam_product"
-    appids: Optional[List] = None
+    gameid_list: Optional[List] = None
     
     
 ############# Inferenece 서버 구축###########
@@ -72,9 +79,9 @@ async def make_order(input: RecSteamProduct,
                                     model: NeuMF=Depends(get_model)):  # model, config 정의 필요, load_model 필요
     products = []
     # Only prototype
-    titles, images = get_model_rec_prototype(get_user, model, inference_)
+    gameid_list = get_model_rec(get_user, model, inference_)
     # titles, images = get_model_rec(model = model, input_ids = input.games, top_k = input.top_k) #  model inference
-    product = inferenceSteamProduct(title = titles, images = images)
+    product = inferenceSteamProduct(gameid_list)
     products.append(product)
     
     new_order = Order(products=products)

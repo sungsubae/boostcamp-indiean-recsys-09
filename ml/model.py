@@ -170,22 +170,19 @@ def inference_(model, test, n_items):
     pred_list = []
     model.eval()
     
-    query_user_ids = test['userid'].unique() # 추론할 모든 user array 집합
     full_item_ids = np.array([c for c in range(n_items)]) # 추론할 모든 item array 집합 
-    for user_id in query_user_ids:
-        with torch.no_grad():
-            user_ids = np.full(n_items, user_id)
+    with torch.no_grad():
+        item_ids = torch.LongTensor(full_item_ids).to('cuda')
             
-            user_ids = torch.LongTensor(user_ids).to('cuda')
-            item_ids = torch.LongTensor(full_item_ids).to('cuda')
-            
-            
-            eval_output = model.forward(user_ids, item_ids).detach().cpu().numpy()
-            pred_u_score = eval_output.reshape(-1)   
+        eval_output = model.forward(item_ids).detach().cpu().numpy()
+        pred_u_score = eval_output.reshape(-1)   
         
-        pred_u_idx = np.argsort(pred_u_score)[::-1]
-        pred_u = full_item_ids[pred_u_idx]
-        pred_list.append(list(pred_u[:50]))
+    pred_u_idx = np.argsort(pred_u_score)[::-1]
+    pred_u = full_item_ids[pred_u_idx]
+    pred_list.append(list(pred_u[:100]))
+        
+    pred = pd.DataFrame(data=pred_list[0], columns=['App_ID'])
+    pred['App_ID'] = item_encoder.inverse_transform(pred['App_ID'])
     
     ######################################################################################################
     # 코드 수정 필요 
@@ -194,7 +191,7 @@ def inference_(model, test, n_items):
     df['predicted_list'] = pred_list
     # 어짜피 User 한 명씩 inference하니까 반복문 밖에서 코드 정의
     
-    titles = {}
+    steam = {}
     posters = {}
     # top_k : 10 , 가져온 index를 기반으로 df상에서 title, image 가져와야 됌
     for col_index in range(
@@ -202,6 +199,7 @@ def inference_(model, test, n_items):
             ):
             steam = df.iloc[col_index]
             titles[col_index] = steam["title"]
+            # TODO1: app_id로 변경
             posters[col_index] = steam["poster_link"] if steam["poster_link"] else Image.open("placeholder.png")
     
     title = [str(x) for x in titles.values()]

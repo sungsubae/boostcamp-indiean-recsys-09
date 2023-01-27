@@ -61,6 +61,7 @@ def get_model(model_path, n_items):
     model.load_state_dict(torch.load(model_path, map_location=device))
     return model
 
+# TODO 3: 없는 아이템 빼주기 (set 이용)
 def inference(model, test, n_items, item_encoder):
     pred_list = []
     model.eval()
@@ -101,5 +102,5 @@ def main():
     # 실제론, request부분은 선행되기에 빠르게 가능? 
     # get_user를 미리 받고, async로 정보 추가 및 inference
     
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
