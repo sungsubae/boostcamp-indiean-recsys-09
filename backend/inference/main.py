@@ -56,31 +56,29 @@ class Order(BaseModel):
 class RecSteamProduct(BaseModel):
     # games: List[int]
     # top_k: int # 필요할까?
-    appid : int
+    gameid_list :Optional[List] = None
 
 class inferenceSteamProduct(Product):
     name: str = "inference_steam_product"
-    titles: Optional[List] = None
     appids: Optional[List] = None
+    
     
 ############# Inferenece 서버 구축###########
 orders = [] #  DB 수정 필요
 
 @app.post("/recom", description = "주문을 요청합니다.")
-# TODO 1 : Backend에서 app_ids 받아오기
+# TODO 
 async def make_order(input: RecSteamProduct,
                                     model: NeuMF=Depends(get_model)):  # model, config 정의 필요, load_model 필요
     products = []
     # Only prototype
-    titles, appids = get_model_rec_prototype(get_user, model, inference_)
+    titles, images = get_model_rec_prototype(get_user, model, inference_)
     # titles, images = get_model_rec(model = model, input_ids = input.games, top_k = input.top_k) #  model inference
-    product = inferenceSteamProduct(title = titles, appids = appids)
+    product = inferenceSteamProduct(title = titles, images = images)
     products.append(product)
     
     new_order = Order(products=products)
-    #  TODO 2: Backend로 appids 보내기
-    # orders.append(new_order)        # Need to Update from orders -> DB
-    
+    orders.append(new_order)                    # Need to Update from orders -> DB
     
     return new_order
     
