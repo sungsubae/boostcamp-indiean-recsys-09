@@ -48,3 +48,8 @@ class HistoryList(BaseModel):
 
     def __len__(self) -> int:
         return len(self.history_list)
+
+
+class UserHistoryList(BaseModel):
+    userid: int
+    gameid_list: List[int]
