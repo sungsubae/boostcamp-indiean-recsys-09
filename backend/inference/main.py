@@ -67,7 +67,7 @@ class inferenceSteamProduct(Product):
 orders = [] #  DB 수정 필요
 
 @app.post("/recom", description = "주문을 요청합니다.")
-# TODO 
+# TODO
 async def make_order(input: RecSteamProduct,
                                     model: NeuMF=Depends(get_model)):  # model, config 정의 필요, load_model 필요
     products = []

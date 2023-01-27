@@ -1,4 +1,4 @@
-name: Slack alert for main branch
+name: Slack alert for main, dev branch
 
 on:
   push:
