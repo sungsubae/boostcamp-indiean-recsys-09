@@ -10,7 +10,6 @@ class HistoryInDB(BaseModel):
     gameid: int
     playtime_total: float
     rtime_last_played: datetime
-    create_time: datetime
 
     class Config:
         orm_mode = True
@@ -21,7 +20,6 @@ class History(BaseModel):
     gameid: int
     playtime_total: float
     rtime_last_played: datetime
-    create_time: datetime
 
     @validator("userid", "gameid", "playtime_total")
     def not_none(cls, v):

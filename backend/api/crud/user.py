@@ -29,3 +29,10 @@ def add_user(db: Session, new_user: UserCreate):
     )
     db.add(db_user)
     db.commit()
+    return db_user
+
+
+def update_user_update_time(db: Session, _user: UserTable):
+    _user.update_time = datetime.utcnow()
+    db.commit()
+    return _user

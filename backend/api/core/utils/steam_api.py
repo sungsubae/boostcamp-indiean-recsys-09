@@ -16,7 +16,8 @@ def request_user_profile(userid: int):
     }
     response = requests.get(api_url, params=data).json()
     response = response["response"]["players"][0]
-    print(response)
+    if response["communityvisibilitystate"] != 3:
+        raise HTTPException(status_code=401, detail="스팀 프로필이 비공개입니다.")
     return UserCreate(
         id=userid,
         persona_name=response["personaname"],

@@ -9,5 +9,7 @@ class CurationTable(Base):
 
     id = Column(BigInteger, primary_key=True, index=True)
     theme = Column(String)
-    games = Column(ARRAY(Integer))
+    gameid = Column(Integer, ForeignKey("game.id"))
     time_created = Column(DateTime)
+
+    game = relationship("GameTable", backref=backref("curations"))
