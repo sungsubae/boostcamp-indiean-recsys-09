@@ -25,6 +25,7 @@ def add_user(db: Session, new_user: UserCreate):
         id=new_user.id,
         persona_name=new_user.persona_name,
         update_time=None,
+        recommend_time=None,
         time_created=new_user.time_created,
     )
     db.add(db_user)
@@ -34,5 +35,11 @@ def add_user(db: Session, new_user: UserCreate):
 
 def update_user_update_time(db: Session, _user: UserTable):
     _user.update_time = datetime.utcnow()
+    db.commit()
+    return _user
+
+
+def update_user_recommend_time(db: Session, _user: UserTable):
+    _user.recommend_time = datetime.utcnow()
     db.commit()
     return _user

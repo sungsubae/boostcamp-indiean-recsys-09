@@ -4,16 +4,28 @@ from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 
 from schemas.history import HistoryInDB
+from schemas.recommend import RecommendInfoDB
 
 
 class UserInDB(BaseModel):
     id: int
     persona_name: str
-    update_time: datetime
+    update_time: Optional[datetime]
+    recommend_time: Optional[datetime]
     time_created: datetime
     
     class Config:
         orm_mode = True
+
+
+class UserRecommendsDB(BaseModel):
+    id: int
+    recommend_time: datetime
+    recommends: List[RecommendInfoDB]
+
+    class Config:
+        orm_mode = True
+
 
 class UserHistory(BaseModel):
     id: int
@@ -23,7 +35,8 @@ class UserHistory(BaseModel):
 class User(BaseModel):
     id: int
     persona_name: str
-    update_time: datetime
+    update_time: Optional[datetime]
+    recommend_time: Optional[datetime]
     time_created: datetime
     
     @validator('id','persona_name')
@@ -37,6 +50,7 @@ class UserCreate(BaseModel):
     id: int
     persona_name: str
     update_time: Optional[datetime]
+    recommend_time: Optional[datetime]
     time_created: datetime
     
     @validator('id','persona_name')

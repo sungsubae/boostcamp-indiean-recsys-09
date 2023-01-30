@@ -10,4 +10,5 @@ class UserTable(Base):
     id = Column(BigInteger, primary_key=True, index=True)
     persona_name = Column(String)
     update_time = Column(DateTime)
+    recommend_time = Column(DateTime)
     time_created = Column(DateTime)
