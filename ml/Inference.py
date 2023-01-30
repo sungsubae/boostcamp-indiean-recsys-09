@@ -61,25 +61,28 @@ def get_model(model_path, n_items):
     model.load_state_dict(torch.load(model_path, map_location=device))
     return model
 
-def inference(model, test, n_items, item_encoder):
+def inference(model, test, item_encoder): 
+    credential_path = 'key.json'
+    credentials = service_account.Credentials.from_service_account_file(credential_path)
+    client = bigquery.Client(credentials=credentials, project=credentials.project_id)
+
+    q="select i.i from (select distinct item_id as i from `data.interaction`) as i inner join (select distinct app_id as i from `data.game`) as g on i.i=g.i"
+    origin = client.query(q).to_dataframe()
+    n_items = origin.shape[0]
+    
     pred_list = []
     model.eval()
     
-    query_user_ids = test['userid'].unique() # 추론할 모든 user array 집합
     full_item_ids = np.array([c for c in range(n_items)]) # 추론할 모든 item array 집합 
-    for user_id in query_user_ids:
-        with torch.no_grad():
-            user_ids = np.full(n_items, user_id)
+    with torch.no_grad():
+        item_ids = torch.LongTensor(full_item_ids).to('cuda')
             
-            user_ids = torch.LongTensor(user_ids).to('cuda')
-            item_ids = torch.LongTensor(full_item_ids).to('cuda')
-            
-            eval_output = model.forward(user_ids, item_ids).detach().cpu().numpy()
-            pred_u_score = eval_output.reshape(-1)   
+        eval_output = model.forward(item_ids).detach().cpu().numpy()
+        pred_u_score = eval_output.reshape(-1)   
         
-        pred_u_idx = np.argsort(pred_u_score)[::-1]
-        pred_u = full_item_ids[pred_u_idx]
-        pred_list.append(list(pred_u[:100]))
+    pred_u_idx = np.argsort(pred_u_score)[::-1]
+    pred_u = full_item_ids[pred_u_idx]
+    pred_list.append(list(pred_u[:100]))
         
     pred = pd.DataFrame(data=pred_list[0], columns=['App_ID'])
     pred['App_ID'] = item_encoder.inverse_transform(pred['App_ID'])
@@ -94,7 +97,7 @@ def main():
     start = time.time()
     userid = "userid"
     api =  "apikey"
-    origin, n_items,filtering = dataload()
+    origin, n_items, iltering = dataload()
     test , item_encoder = get_user(api, userid, origin)
     model = get_model('../model/bestmodel_{}.pth'.format(datetime.now().day), n_items)
     pred = inference(model, test, n_items, item_encoder)
