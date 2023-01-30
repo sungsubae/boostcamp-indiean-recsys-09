@@ -61,8 +61,16 @@ def get_model(model_path, n_items):
     model.load_state_dict(torch.load(model_path, map_location=device))
     return model
 
-# TODO 3: 없는 아이템 빼주기 (set 이용)
-def inference(model, test, n_items, item_encoder):
+def inference(model): 
+    credential_path = 'key.json'
+    credentials = service_account.Credentials.from_service_account_file(credential_path)
+    client = bigquery.Client(credentials=credentials, project=credentials.project_id)
+
+    q="select i.i from (select distinct item_id as i from `data.interaction`) as i inner join (select distinct app_id as i from `data.game`) as g on i.i=g.i"
+    origin = client.query(q).to_dataframe()
+    n_items = origin.shape[0]
+    item_encoder = joblib.load('item_encoder.joblib')
+    
     pred_list = []
     model.eval()
     
@@ -81,8 +89,27 @@ def inference(model, test, n_items, item_encoder):
     pred['App_ID'] = item_encoder.inverse_transform(pred['App_ID'])
     # TODO 4: DataFrame -> List 형변환 해서 Return 해야 됌
     
-    return pred
+    return pred['App_ID'].tolist()
 
 def filter(pred, filtering):
     real_pred = pd.merge(pred, filtering, on='App_ID',how='inner')
     return real_pred
+
+def main():
+    start = time.time()
+    userid = "userid"
+    api =  "apikey"
+    origin, n_items, iltering = dataload()
+    test , item_encoder = get_user(api, userid, origin)
+    model = get_model('../model/bestmodel_{}.pth'.format(datetime.now().day), n_items)
+    pred = inference(model, test, n_items, item_encoder)
+    
+    real_pred = filter(pred, filtering)
+    
+    print(real_pred)
+    print(f"{time.time()-start:.4f} sec")
+    # 실제론, request부분은 선행되기에 빠르게 가능? 
+    # get_user를 미리 받고, async로 정보 추가 및 inference
+    
+if __name__ == "__main__":
+    main()

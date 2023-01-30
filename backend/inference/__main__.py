@@ -1,4 +1,4 @@
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("backend.inference.main:app", host="49.50.162.219 ", port=30001, reload=True)
+    uvicorn.run("backend.inference.main:app", host="0.0.0.0 ", port=30001, reload=True)

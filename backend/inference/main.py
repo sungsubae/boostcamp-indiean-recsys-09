@@ -18,9 +18,8 @@ from fastapi.templating import Jinja2Templates
 from datetime import datetime
 from pandas import DataFrame
 
-from ml.Inference import get_model_rec, inference_
+from ml.Inference import inference
 from ml.model import NueMF, get_model
-
 
 app = FastAPI()
 
@@ -63,7 +62,7 @@ async def make_order(input: RecSteamProduct,
                                     model: NueMF=Depends(get_model)):  # model, config 정의 필요, load_model 필요
     products = []
     # TODO 1: Recommend List
-    gameid_list = get_model_rec(get_user, model, inference_)
+    gameid_list = inference(model)
     # titles, images = get_model_rec(model = model, input_ids = input.games, top_k = input.top_k) #  model inference
     product = inferenceSteamProduct(gameid_list)
     products.append(product)
