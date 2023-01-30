@@ -119,7 +119,7 @@ def train_predict(train, test, game):
 def main():
     userid=76561198117856251
     train, game = dataload()
-    test = get_user(userid) 
+    test = get_user(userid, api) 
     output = train_predict(train, test, game)
     return output
 
