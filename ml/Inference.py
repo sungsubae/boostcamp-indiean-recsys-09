@@ -61,7 +61,15 @@ def get_model(model_path, n_items):
     model.load_state_dict(torch.load(model_path, map_location=device))
     return model
 
-def inference(model, test, n_items, item_encoder):
+def inference(model, test, item_encoder): 
+    credential_path = 'key.json'
+    credentials = service_account.Credentials.from_service_account_file(credential_path)
+    client = bigquery.Client(credentials=credentials, project=credentials.project_id)
+
+    q="select i.i from (select distinct item_id as i from `data.interaction`) as i inner join (select distinct app_id as i from `data.game`) as g on i.i=g.i"
+    origin = client.query(q).to_dataframe()
+    n_items = origin.shape[0]
+    
     pred_list = []
     model.eval()
     
@@ -89,7 +97,7 @@ def main():
     start = time.time()
     userid = "userid"
     api =  "apikey"
-    origin, n_items,filtering = dataload()
+    origin, n_items, iltering = dataload()
     test , item_encoder = get_user(api, userid, origin)
     model = get_model('../model/bestmodel_{}.pth'.format(datetime.now().day), n_items)
     pred = inference(model, test, n_items, item_encoder)
