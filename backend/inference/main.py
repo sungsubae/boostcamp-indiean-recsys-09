@@ -19,7 +19,7 @@ from datetime import datetime
 from pandas import DataFrame
 
 from ml.Inference import inference
-from ml.model import NueMF, get_model
+from ml.model import NeuMF, get_model
 
 app = FastAPI()
 
@@ -59,7 +59,7 @@ class inferenceSteamProduct(Product):
 
 @app.post("/recom", description = "로그인 정보 요청합니다.")
 async def make_order(input: RecSteamProduct,
-                                    model: NueMF=Depends(get_model)):  # model, config 정의 필요, load_model 필요
+                                    model: NeuMF=Depends(get_model)):  # model, config 정의 필요, load_model 필요
     products = []
     # TODO 1: Recommend List
     gameid_list = inference(model)
