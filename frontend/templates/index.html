@@ -12,7 +12,7 @@
             display: flex;
             overflow: hidden;
         }
-
+ 
         .sl {
             position: relative;
             transition: 1s;
@@ -122,43 +122,12 @@
 
         <!-- Items -->
         <div class="items">
-
+            {% for item in rule_based %}
             <article class="item thumb span-1">
-                <h2 style="color: azure;">Kingdom of the Wind</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/05.jpg" alt=""></a>
+                <h2 style="color: azure;">{{ item[1] }}</h2><a href="http://0.0.0.0:8000/gamepage/{{ item[0] }}"><img
+                        src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ item[0] }}/header.jpg" alt=""></a>
             </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">The Pursuit</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/06.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Boundless</h2><a href="http://0.0.0.0:8000/gamepage"<img
-                        src="images/thumbs/07.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">The Spectators</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/08.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">You really got me</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/01.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Ad Infinitum</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/02.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Different.</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/03.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Kingdom of the Wind</h2><a href="http://0.0.0.0:8000/gamepage" ><img
-                        src="images/thumbs/05.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Elysium</h2><a href="http://0.0.0.0:8000/gamepage" ><img
-                        src="images/thumbs/04.jpg" alt=""></a>
-            </article>
+            {% endfor%}
 
         </div>
 
@@ -170,59 +139,13 @@
         <!-- Items -->
         <div class="items">
 
+            {% for item in new_games %}
             <article class="item thumb span-1">
-                <h2 style="color: azure;">Kingdom of the Wind</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/05.jpg" alt=""></a>
+                <h2 style="color: azure;">{{ item[1] }}</h2><a href="http://0.0.0.0:8000/gamepage/{{ item[0] }}"><img
+                        src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ item[0] }}/header.jpg" alt=""></a>
             </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">The Pursuit</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/06.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Boundless</h2><a href="http://0.0.0.0:8000/gamepage"<img
-                        src="images/thumbs/07.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">The Spectators</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/08.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">You really got me</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/01.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Ad Infinitum</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/02.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Different.</h2><a href="http://0.0.0.0:8000/gamepage"><img
-                        src="images/thumbs/03.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Kingdom of the Wind</h2><a href="http://0.0.0.0:8000/gamepage" ><img
-                        src="images/thumbs/05.jpg" alt=""></a>
-            </article>
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">Elysium</h2><a href="http://0.0.0.0:8000/gamepage" ><img
-                        src="images/thumbs/04.jpg" alt=""></a>
-            </article>
-
+            {% endfor%}
         </div>
-
-        <h2>
-            <br>
-            <br>
-            <br>
-            기능추가-1
-            <br>
-            <br>
-            <br>
-            기능추가-2
-            <br>
-            <br>
-            <br>
-            
-        </h2>
         
     </div>
 

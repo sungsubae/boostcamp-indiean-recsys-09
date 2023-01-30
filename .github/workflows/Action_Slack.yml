@@ -1,0 +1,32 @@
+name: Slack alert for main branch
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+  # uses는 다른 사람이 이미 만들어 놓은 action을 사용할 때 지정
+    steps:
+      - name: Checkout
+      - uses: actions/checkout@v2
+      
+      - name: action-slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,commit,message,author # action,eventName,ref,workflow,job,took 추가할 수 있음
+          mention: here
+          if_mention: failure,cancelled
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: always() # Pick up events even if the job fails or is canceled.
