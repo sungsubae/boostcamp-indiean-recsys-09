@@ -79,28 +79,10 @@ def inference(model, test, n_items, item_encoder):
         
     pred = pd.DataFrame(data=pred_list[0], columns=['App_ID'])
     pred['App_ID'] = item_encoder.inverse_transform(pred['App_ID'])
+    # TODO 4: DataFrame -> List 형변환 해서 Return 해야 됌
     
     return pred
 
 def filter(pred, filtering):
     real_pred = pd.merge(pred, filtering, on='App_ID',how='inner')
     return real_pred
-
-def main():
-    start = time.time()
-    userid = "userid"
-    api =  "apikey"
-    origin, n_items,filtering = dataload()
-    test , item_encoder = get_user(api, userid, origin)
-    model = get_model('../model/bestmodel_{}.pth'.format(datetime.now().day), n_items)
-    pred = inference(model, test, n_items, item_encoder)
-    
-    real_pred = filter(pred, filtering)
-    
-    print(real_pred)
-    print(f"{time.time()-start:.4f} sec")
-    # 실제론, request부분은 선행되기에 빠르게 가능? 
-    # get_user를 미리 받고, async로 정보 추가 및 inference
-    
-# if __name__ == "__main__":
-#     main()
