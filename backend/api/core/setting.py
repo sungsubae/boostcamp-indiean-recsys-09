@@ -27,15 +27,20 @@ class DBConfig(BaseSettings):
         return f"{self.base}{self.user}:{self.password}@{self.ip}:{self.port}/{self.database}"
 
 
+class InferConfig(BaseSettings):
+    url: str = Field(default="http://localhost", env="infer")
+
+
 class AppConfig(BaseSettings):
     env: ConfigEnv = Field(default="dev", env="env")
     steam: SteamConfig = SteamConfig()
     db: DBConfig = DBConfig()
+    infer: InferConfig()
 
 with open("config.yaml", "r") as f:
     raw_config = load(f, FullLoader)
 
 config = AppConfig(**raw_config)
 
-assert config.env == "dev"
+# assert config.env == "dev"
 assert len(config.steam.apikey) == 32

@@ -3,6 +3,8 @@ from datetime import datetime
 from pydantic import BaseModel, Field, validator
 from typing import List
 
+from schemas.game import GameBaseDB
+
 
 class HistoryInDB(BaseModel):
     id: int
@@ -14,6 +16,12 @@ class HistoryInDB(BaseModel):
     class Config:
         orm_mode = True
 
+
+class HistoryGameDB(BaseModel):
+    game: GameBaseDB
+
+    class Config:
+        orm_mode = True
 
 class History(BaseModel):
     userid: int

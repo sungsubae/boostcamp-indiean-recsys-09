@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 
-from schemas.game import GameInDB
+from schemas.game import GameBaseDB
 
 
 class RecommendCreate(BaseModel):
@@ -19,8 +19,7 @@ class RecommendBaseDB(BaseModel):
 
 
 class RecommendInfoDB(BaseModel):
-    gameid: int
-    game: GameInDB
+    game: GameBaseDB
 
     class Config:
         orm_mode = True
