@@ -88,6 +88,7 @@ def inference(model):
     pred = pd.DataFrame(data=pred_list[0], columns=['App_ID'])
     pred['App_ID'] = item_encoder.inverse_transform(pred['App_ID'])
     # TODO 4: DataFrame -> List 형변환 해서 Return 해야 됌
+    print(pred['App_ID'].tolist())
     
     return pred['App_ID'].tolist()
 

@@ -63,8 +63,8 @@ async def make_order(input: RecSteamProduct,
     products = []
     # TODO 1: Recommend List
     gameid_list = inference(model)
-    # titles, images = get_model_rec(model = model, input_ids = input.games, top_k = input.top_k) #  model inference
-    product = inferenceSteamProduct(gameid_list)
+    # input 인자 이와 같이 명시해줘야 함
+    product = inferenceSteamProduct(gameid_list = gameid_list)
     products.append(product)
     
     new_order = Order(products=products)
