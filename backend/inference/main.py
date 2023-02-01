@@ -4,22 +4,14 @@ from pydantic import BaseModel, Field
 from uuid import UUID, uuid4
 from typing import List, Union, Optional, Dict, Any
 
-### DB 관련 모듈 ###
-from sqlalchemy.orm import Session
-from sqlalchemy.sql import text
-# import backend.app.DB.crud as crud
-# import backend.app.DB.schemas as schemas
-# from backend.app.DB.database import SessionLocal, engine
-# import backend.app.DB.models as models
-#################
-
-from fastapi.templating import Jinja2Templates
-
 from datetime import datetime
 from pandas import DataFrame
 
 from ml.Inference import inference
 from ml.model import NeuMF, get_model
+
+from ml import ease
+from ml.ease import dataload, get_user, inference
 
 app = FastAPI()
 
@@ -42,11 +34,11 @@ class Order(BaseModel):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at:datetime = Field(default_factory=datetime.now)
 
-# Backdend에서 User game list 갖고와서 여기에 전달
+# 'appid','playtime_forever', 'uesrid' -> userid, playtime_forever의 type 파악
 # json으로 받아와서 class 정의
 class RecSteamProduct(BaseModel):
-    # games: List[int]
-    # top_k: int # 필요할까?
+    userid : str 
+    playtime_forever : int
     gameid_list :Optional[List] = None
 
 class inferenceSteamProduct(Product):
@@ -57,7 +49,7 @@ class inferenceSteamProduct(Product):
 ############# Inferenece 서버 구축###########
 # orders = [] #  DB 수정 필요
 
-@app.post("/recom", description = "로그인 정보 요청합니다.")
+@app.post("/recomNeu", description = "로그인 정보 요청합니다.")
 async def make_order(input: RecSteamProduct,
                                     model: NeuMF=Depends(get_model)):  # model, config 정의 필요, load_model 필요
     products = []
@@ -68,7 +60,29 @@ async def make_order(input: RecSteamProduct,
     products.append(product)
     
     new_order = Order(products=products)
-    # orders.append(new_order)    # Need to Update from orders -> DB
+    
+    return new_order
+
+# flow : dataload, get_user, train_predict
+# dataload : key.json file path
+# get_user : input.userid, input.playtime_forever, input.gameid_list
+# inference : 
+@app.post("/recom", description = "로그인 정보 요청합니다.")
+async def make_order(input: RecSteamProduct,
+                                    model: ease):  # model, config 정의 필요, load_model 필요
+    products = []
+    # TODO 1: Recommend List
+    train, games = dataload()
+    test = get_user(input.userid, input.playtime_forever, input.gameid_list)
+    gameid_list = inference(train, test, games)
+    # input 인자 이와 같이 명시
+    product = inferenceSteamProduct(gameid_list = gameid_list)
+    products.append(product)
+    
+    new_order = Order(products=products)
     
     return new_order
     
+# train, game = dataload()
+# test = get_user(userid, api) 
+# output = inference(train, test, game)

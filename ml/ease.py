@@ -84,7 +84,7 @@ class EASE:
         return r
     
 def dataload():
-    credential_path = 'key.json'
+    credential_path = '/opt/ml/level3_Final_project/final-project-level3-recsys-09/glassy-droplet-375219-9e50b4fc0381.json'
     credentials = service_account.Credentials.from_service_account_file(credential_path)
     client = bigquery.Client(credentials=credentials, project=credentials.project_id)
 
@@ -97,15 +97,12 @@ def dataload():
     return data, game
 
     
-def get_user(userid,api):
-    input_ = requests.get(f'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={api}&steamid={userid}&include_played_free_games=True&include_appinfo=True')
-    test = pd.DataFrame(input_.json()['response']['games'])
-    test = test[['appid','playtime_forever']]
-    test['userid'] = userid
-    test.columns = ['item_id','playtime_forever' ,'userid']
+def get_user(userid, playtime_forever, gameid_list):
+    data = {'userid': [userid] * len(gameid_list), 'playtime_forever': [playtime_forever] * len(gameid_list), 'item_id' : gameid_list}
+    test = pd.DataFrame(data)
     return test
 
-def train_predict(train, test, game): 
+def inference(train, test, game): 
     model = EASE()
     train = pd.concat([train, test]).reset_index()
     train['rating'] = 1
@@ -113,14 +110,14 @@ def train_predict(train, test, game):
     model.fit(train, 0.5, implicit=False)
     output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 50)
     list_ = game[(game['Genre'].str.contains('Indie', na=False)) & (game['Positive_Reviews']>=game['Negative_Reviews']*4) & (game['Positive_Reviews']+game['Negative_Reviews']<=50000)]['App_ID'].values
-    output = output[output['item_id'].isin(list_)]['item_id'].values
+    output = output[output['item_id'].isin(list_)]['item_id'].values.tolist()
     return output
 
 def main():
     userid=76561198117856251
     train, game = dataload()
     test = get_user(userid, api) 
-    output = train_predict(train, test, game)
+    output = inference(train, test, game)
     return output
 
 if __name__ == "__main__":
