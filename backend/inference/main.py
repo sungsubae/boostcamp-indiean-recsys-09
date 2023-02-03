@@ -37,7 +37,7 @@ class Order(BaseModel):
 # 'appid','playtime_forever', 'uesrid' -> userid, playtime_forever의 type 파악
 # json으로 받아와서 class 정의
 class RecSteamProduct(BaseModel):
-    userid : str 
+    userid : int 
     playtime_forever : int
     gameid_list :Optional[List] = None
 

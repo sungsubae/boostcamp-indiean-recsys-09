@@ -113,12 +113,12 @@ def inference(train, test, game):
     output = output[output['item_id'].isin(list_)]['item_id'].values.tolist()
     return output
 
-def main():
-    userid=76561198117856251
-    train, game = dataload()
-    test = get_user(userid, api) 
-    output = inference(train, test, game)
-    return output
+# def main():
+#     userid=76561198117856251
+#     train, game = dataload()
+#     test = get_user(userid, api) 
+#     output = inference(train, test, game)
+#     return output
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
