@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 
-from schemas.history import HistoryInDB
+from schemas.history import HistoryGameDB
 from schemas.recommend import RecommendInfoDB
 
 
@@ -19,18 +19,25 @@ class UserInDB(BaseModel):
 
 
 class UserRecommendsDB(BaseModel):
-    id: int
-    recommend_time: datetime
+    recommend_time: Optional[datetime]
     recommends: List[RecommendInfoDB]
 
     class Config:
         orm_mode = True
 
 
-class UserHistory(BaseModel):
+class UserHistoriesDB(BaseModel):
     id: int
     persona_name: str
-    histories: List[HistoryInDB]
+    histories: List[HistoryGameDB]
+
+    class Config:
+        orm_mode = True
+
+
+class UserBase(BaseModel):
+    id: int
+
 
 class User(BaseModel):
     id: int

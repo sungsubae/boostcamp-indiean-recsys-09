@@ -4,6 +4,14 @@ from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 
 
+class GameBaseDB(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
 class GameInDB(BaseModel):
     id : int
     name : str

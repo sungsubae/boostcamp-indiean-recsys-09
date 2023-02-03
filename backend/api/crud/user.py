@@ -11,7 +11,7 @@ def get_user_list(db: Session):
     return user_list
 
 
-def get_user(db: Session, user_id: int):
+def get_user(db: Session, user_id: int) -> UserTable:
     u = db.query(UserTable).filter(UserTable.id == user_id).first()
 
     if u is None:

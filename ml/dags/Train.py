@@ -20,6 +20,11 @@ from torch.nn.init import normal_
 from sklearn.preprocessing import LabelEncoder
 import joblib
 
+from datetime import timedelta
+from airflow import DAG
+from airflow.utils.dates import days_ago
+from airflow.operators.bash import BashOperator
+from airflow.operators.python import PythonOperator
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -109,7 +114,7 @@ class NeuMF(nn.Module):
             if module.bias is not None:
                 module.bias.data.fill_(0.0)
     
-    def forward(self, item_indices):
+    def forward(self, user_indices, item_indices):
         #user_embedding_mf = self.user_embedding_mf(user_indices)
         item_embedding_mf = self.item_embedding_mf(item_indices)
         mf_output = item_embedding_mf
@@ -217,6 +222,7 @@ def train_epoch(UIdataset,n_users, epoch, batch_size,model, optimizer, criterion
     for step, batch_idx in enumerate(bar):
         user_ids, item_ids, labels = make_batchdata(UIdataset,user_indices, batch_idx, batch_size)
         # 배치 사용자 단위로 학습
+        user_ids = torch.LongTensor(user_ids).to('cuda')
         item_ids = torch.LongTensor(item_ids).to('cuda')
         labels = torch.FloatTensor(labels).to('cuda')
         labels = labels.view(-1, 1)
@@ -225,7 +231,7 @@ def train_epoch(UIdataset,n_users, epoch, batch_size,model, optimizer, criterion
         optimizer.zero_grad()
 
         # 모델 forward
-        output = model.forward(item_ids)
+        output = model.forward(user_ids, item_ids)
         output = output.view(-1, 1)
 
         loss = criterion(output, labels)
@@ -253,10 +259,13 @@ def valid_epoch(model, data, n_items):
     full_item_ids = np.array([c for c in range(n_items)]) # 추론할 모든 item array 집합 
     for user_id in query_user_ids:
         with torch.no_grad():
+            user_ids = np.full(n_items, user_id)
+            
+            user_ids = torch.LongTensor(user_ids).to('cuda')
             item_ids = torch.LongTensor(full_item_ids).to('cuda')
             
             
-            eval_output = model.forward(item_ids).detach().cpu().numpy()
+            eval_output = model.forward(user_ids, item_ids).detach().cpu().numpy()
             pred_u_score = eval_output.reshape(-1)   
         
         pred_u_idx = np.argsort(pred_u_score)[::-1]
@@ -298,5 +307,3 @@ def main():
     matrix = make_UIdataset(train, 2)
     training(matrix, data ,n_users, n_items, epochs=1, batch_size=1024)
     
-if __name__ =="__main__":
-    main()
