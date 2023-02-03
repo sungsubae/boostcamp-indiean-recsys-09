@@ -102,16 +102,15 @@ def get_user(userid, playtime_forever, gameid_list):
     test = pd.DataFrame(data)
     return test
 
-def inference(train, test, game): 
-    model = EASE()
+def inference(train, test, game, model): 
     train = pd.concat([train, test]).reset_index()
     train['rating'] = 1
     train.loc[train[train['playtime_forever']<=120].index,'rating'] = 0
     model.fit(train, 0.5, implicit=False)
     output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 50)
     list_ = game[(game['Genre'].str.contains('Indie', na=False)) & (game['Positive_Reviews']>=game['Negative_Reviews']*4) & (game['Positive_Reviews']+game['Negative_Reviews']<=50000)]['App_ID'].values
-    output = output[output['item_id'].isin(list_)]['item_id'].values.tolist()
-    return output
+    output = output[output['item_id'].isin(list_)]['item_id'].values
+    return output.tolist()
 
 # def main():
 #     userid=76561198117856251
@@ -122,3 +121,6 @@ def inference(train, test, game):
 
 # if __name__ == "__main__":
 #     main()
+
+def get_model():
+    return EASE

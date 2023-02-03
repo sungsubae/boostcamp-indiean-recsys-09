@@ -62,7 +62,7 @@ def get_model(model_path, n_items):
     return model
 
 def inference(model): 
-    credential_path = '/opt/ml/level3_Final_project/glassy-droplet-375219-9e50b4fc0381.json'
+    credential_path = '/opt/ml/level3_Final_project/final-project-level3-recsys-09/glassy-droplet-375219-9e50b4fc0381.json'
     credentials = service_account.Credentials.from_service_account_file(credential_path)
     client = bigquery.Client(credentials=credentials, project=credentials.project_id)
 

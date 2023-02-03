@@ -10,8 +10,7 @@ from pandas import DataFrame
 from ml.Inference import inference
 from ml.model import NeuMF, get_model
 
-from ml import ease
-from ml.ease import dataload, get_user, inference
+from ml.ease import dataload, get_user, inference, EASE
 
 app = FastAPI()
 
@@ -69,12 +68,12 @@ async def make_order(input: RecSteamProduct,
 # inference : 
 @app.post("/recom", description = "로그인 정보 요청합니다.")
 async def make_order(input: RecSteamProduct,
-                                    model: ease):  # model, config 정의 필요, load_model 필요
+                                    ):  # model, config 정의 필요, load_model 필요
     products = []
     # TODO 1: Recommend List
     train, games = dataload()
     test = get_user(input.userid, input.playtime_forever, input.gameid_list)
-    gameid_list = inference(train, test, games)
+    gameid_list = inference(train, test, games, EASE)
     # input 인자 이와 같이 명시
     product = inferenceSteamProduct(gameid_list = gameid_list)
     products.append(product)
