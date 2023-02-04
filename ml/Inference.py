@@ -20,7 +20,11 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
+<<<<<<< HEAD
 from ml.model import NeuMF
+=======
+# from model import NeuMF
+>>>>>>> api
 
 def dataload():
     credential_path = 'key.json'

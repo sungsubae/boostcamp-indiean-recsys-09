@@ -3,27 +3,46 @@ from datetime import datetime
 from pydantic import BaseModel, Field, validator
 from typing import List
 
+from schemas.game import GameBaseDB
+
 
 class HistoryInDB(BaseModel):
     id: int
     userid: int
-    appid: int
+    gameid: int
     playtime_total: float
     rtime_last_played: datetime
-    create_time: datetime
 
     class Config:
         orm_mode = True
 
 
+class HistoryGameDB(BaseModel):
+    game: GameBaseDB
+
+    class Config:
+        orm_mode = True
+
 class History(BaseModel):
     userid: int
-    appid: int
+    gameid: int
     playtime_total: float
     rtime_last_played: datetime
-    create_time: datetime
 
-    @validator('userid','appid','playtime_total')
+    @validator("userid", "gameid", "playtime_total")
+    def not_none(cls, v):
+        if not v:
+            raise ValueError(f"{cls}에 빈 값은 허용되지 않습니다.")
+        return v
+
+
+class HistoryCreate(BaseModel):
+    userid: int
+    gameid: int
+    playtime_total: float
+    rtime_last_played: datetime
+
+    @validator("userid", "gameid", "playtime_total")
     def not_none(cls, v):
         if not v:
             raise ValueError(f"{cls}에 빈 값은 허용되지 않습니다.")
@@ -35,3 +54,8 @@ class HistoryList(BaseModel):
 
     def __len__(self) -> int:
         return len(self.history_list)
+
+
+class UserHistoryList(BaseModel):
+    userid: int
+    gameid_list: List[int]

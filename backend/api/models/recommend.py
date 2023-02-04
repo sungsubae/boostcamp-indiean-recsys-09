@@ -9,7 +9,7 @@ class RecommendTable(Base):
 
     id = Column(BigInteger, primary_key=True, index=True)
     userid = Column(BigInteger, ForeignKey("users.id"))
-    games = Column(ARRAY(Integer))
-    time_created = Column(DateTime)
+    gameid = Column(Integer, ForeignKey("game.id"))
 
-    user = relationship("UserTable", backref=backref("recommend"))
+    user = relationship("UserTable", backref=backref("recommends"))
+    game = relationship("GameTable", backref=backref("recommends"))
