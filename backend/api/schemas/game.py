@@ -58,7 +58,7 @@ class Game(BaseModel):
 
     @validator("id","name")
     def not_none(cls, v):
-        if not v:
+        if v == None:
             raise ValueError(f"{cls}에 빈 값은 허용되지 않습니다.")
         return v
 

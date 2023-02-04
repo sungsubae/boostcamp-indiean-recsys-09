@@ -18,7 +18,6 @@ router = APIRouter(prefix="/login")
 @router.post("/checkdb")
 def user_login(userid: UserBase, db: Session = Depends(get_db)) -> bool:
     # 유저가 DB에 없으면 유저 profile을 api로 가져와 DB에 저장
-    print(userid)
     userid = userid.id
     _user = get_user(db, userid)
     if _user == False:
@@ -33,11 +32,12 @@ def user_login(userid: UserBase, db: Session = Depends(get_db)) -> bool:
         _user = update_user_update_time(db, _user)
     
     # 추천결과가 없거나 갱신한지 하루가 지났다면 api로 가져와 DB에 저장
-    if _user.recommend_time == None or (datetime.utcnow() - _user.recommend_time).days >= 1:
+    if _user.recommend_time == None or (datetime.utcnow() - _user.recommend_time).days >= 0:
         if _history_list == None:
             _history_list = get_user_history(db, _user)
         gameid_list = [h.gameid for h in _history_list]
-        new_rec_list = request_recommendation(userid, gameid_list)
+        playtime_forever = [h.playtime_total for h in _history_list]
+        new_rec_list = request_recommendation(userid, gameid_list, playtime_forever)
         delete_and_add_recommends(db, userid, new_rec_list)
         _user = update_user_recommend_time(db,_user)
 
