@@ -37,7 +37,7 @@ class Order(BaseModel):
 # json으로 받아와서 class 정의
 class RecSteamProduct(BaseModel):
     userid : int 
-    playtime_forever : int
+    playtime_forever : Optional[List] = None
     gameid_list :Optional[List] = None
 
 class inferenceSteamProduct(Product):
@@ -66,14 +66,19 @@ async def make_order(input: RecSteamProduct,
 # dataload : key.json file path
 # get_user : input.userid, input.playtime_forever, input.gameid_list
 # inference : 
+
 @app.post("/recom", description = "로그인 정보 요청합니다.")
 async def make_order(input: RecSteamProduct,
                                     ):  # model, config 정의 필요, load_model 필요
     products = []
     # TODO 1: Recommend List
     train, games = dataload()
+    print(input)
+    print(type(input.userid))
+    print(type(input.playtime_forever))
+    print(type(input.gameid_list))
     test = get_user(input.userid, input.playtime_forever, input.gameid_list)
-    gameid_list = inference(train, test, games, EASE)
+    gameid_list = inference(train, test, games, EASE())
     # input 인자 이와 같이 명시
     product = inferenceSteamProduct(gameid_list = gameid_list)
     products.append(product)

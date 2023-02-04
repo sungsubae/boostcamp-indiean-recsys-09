@@ -41,11 +41,14 @@ class EASE:
         
         
     def predict(self, train, users, items, k):
-        items = self.item_enc.transform(items)
+        items = self.item_enc.fit_transform(items)
         dd = train.loc[train.userid.isin(users)]
-        dd['ci'] = self.item_enc.transform(dd.item_id)
-        dd['cu'] = self.user_enc.transform(dd.userid)
-        g = dd.groupby('cu')
+        print(dd)
+        print(type(dd.item_id))
+        print(dd.item_id)
+        dd['item_id'] = self.item_enc.transform(dd.item_id.astype(str))
+        dd['userid'] = self.user_enc.transform(dd.userid)
+        g = dd.groupby('userid')
         
         with Pool(cpu_count()) as p:
             user_preds = p.starmap(
@@ -55,6 +58,7 @@ class EASE:
         df = pd.concat(user_preds)
         df['item_id'] = self.item_enc.inverse_transform(df['item_id'])
         df['userid'] = self.user_enc.inverse_transform(df['userid'])
+        
         return df
     
     def evaluation(train, test): 
@@ -70,7 +74,7 @@ class EASE:
     
     @staticmethod
     def predict_for_user(user, group, pred, items, k):
-        watched = set(group['ci'])
+        watched = set(group['item_id'])
         candidates = [item for item in items if item not in watched]
         pred = np.take(pred, candidates)
         res = np.argpartition(pred, -k)[-k:]
@@ -81,6 +85,7 @@ class EASE:
                 "score": np.take(pred, res),
             }
         ).sort_values('score', ascending=False)
+        
         return r
     
 def dataload():
@@ -98,18 +103,24 @@ def dataload():
 
     
 def get_user(userid, playtime_forever, gameid_list):
-    data = {'userid': [userid] * len(gameid_list), 'playtime_forever': [playtime_forever] * len(gameid_list), 'item_id' : gameid_list}
+    data = {'userid': [str(userid)] * len(gameid_list), 'playtime_forever': playtime_forever, 'item_id' : [str(x) for x in gameid_list]}
     test = pd.DataFrame(data)
     return test
 
 def inference(train, test, game, model): 
+    train.item_id = train.item_id.astype(str)
+    train.userid = train.userid.astype(str)
     train = pd.concat([train, test]).reset_index()
     train['rating'] = 1
     train.loc[train[train['playtime_forever']<=120].index,'rating'] = 0
+    print(train.columns)
     model.fit(train, 0.5, implicit=False)
-    output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 50)
-    list_ = game[(game['Genre'].str.contains('Indie', na=False)) & (game['Positive_Reviews']>=game['Negative_Reviews']*4) & (game['Positive_Reviews']+game['Negative_Reviews']<=50000)]['App_ID'].values
+    output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 1000)
+    print(output)
+    list_ = game[(game['Genre'].str.contains('Indie', na=False))]['App_ID'].values.astype(str)
+    print(list_)
     output = output[output['item_id'].isin(list_)]['item_id'].values
+    print(output)
     return output.tolist()
 
 # def main():
