@@ -20,7 +20,11 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-from Inference import NeuMF
+<<<<<<< HEAD
+from ml.model import NeuMF
+=======
+# from model import NeuMF
+>>>>>>> api
 
 def dataload():
     credential_path = 'key.json'
@@ -62,14 +66,14 @@ def get_model(model_path, n_items):
     return model
 
 def inference(model): 
-    credential_path = 'key.json'
+    credential_path = '/opt/ml/level3_Final_project/final-project-level3-recsys-09/glassy-droplet-375219-9e50b4fc0381.json'
     credentials = service_account.Credentials.from_service_account_file(credential_path)
     client = bigquery.Client(credentials=credentials, project=credentials.project_id)
 
     q="select i.i from (select distinct item_id as i from `data.interaction`) as i inner join (select distinct app_id as i from `data.game`) as g on i.i=g.i"
     origin = client.query(q).to_dataframe()
     n_items = origin.shape[0]
-    item_encoder = joblib.load('item_encoder.joblib')
+    item_encoder = joblib.load('/opt/ml/level3_Final_project/final-project-level3-recsys-09/ml/item_encoder.joblib')
     
     pred_list = []
     model.eval()
@@ -79,7 +83,7 @@ def inference(model):
         item_ids = torch.LongTensor(full_item_ids).to('cuda')
             
         eval_output = model.forward(item_ids).detach().cpu().numpy()
-        pred_u_score = eval_output.reshape(-1)   
+        pred_u_score = eval_output.reshape(-1)
         
     pred_u_idx = np.argsort(pred_u_score)[::-1]
     pred_u = full_item_ids[pred_u_idx]
@@ -88,6 +92,7 @@ def inference(model):
     pred = pd.DataFrame(data=pred_list[0], columns=['App_ID'])
     pred['App_ID'] = item_encoder.inverse_transform(pred['App_ID'])
     # TODO 4: DataFrame -> List 형변환 해서 Return 해야 됌
+    print(pred['App_ID'].tolist())
     
     return pred['App_ID'].tolist()
 

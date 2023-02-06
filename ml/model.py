@@ -54,7 +54,7 @@ class NeuMF(nn.Module):
             if module.bias is not None:
                 module.bias.data.fill_(0.0)
     
-    def forward(self, user_indices, item_indices):
+    def forward(self, item_indices):
         #user_embedding_mf = self.user_embedding_mf(user_indices)
         item_embedding_mf = self.item_embedding_mf(item_indices)
         mf_output = item_embedding_mf

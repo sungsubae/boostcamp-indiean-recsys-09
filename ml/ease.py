@@ -41,11 +41,14 @@ class EASE:
         
         
     def predict(self, train, users, items, k):
-        items = self.item_enc.transform(items)
+        items = self.item_enc.fit_transform(items)
         dd = train.loc[train.userid.isin(users)]
-        dd['ci'] = self.item_enc.transform(dd.item_id)
-        dd['cu'] = self.user_enc.transform(dd.userid)
-        g = dd.groupby('cu')
+        print(dd)
+        print(type(dd.item_id))
+        print(dd.item_id)
+        dd['item_id'] = self.item_enc.transform(dd.item_id.astype(str))
+        dd['userid'] = self.user_enc.transform(dd.userid)
+        g = dd.groupby('userid')
         
         with Pool(cpu_count()) as p:
             user_preds = p.starmap(
@@ -55,6 +58,7 @@ class EASE:
         df = pd.concat(user_preds)
         df['item_id'] = self.item_enc.inverse_transform(df['item_id'])
         df['userid'] = self.user_enc.inverse_transform(df['userid'])
+        
         return df
     
     def evaluation(train, test): 
@@ -70,7 +74,7 @@ class EASE:
     
     @staticmethod
     def predict_for_user(user, group, pred, items, k):
-        watched = set(group['ci'])
+        watched = set(group['item_id'])
         candidates = [item for item in items if item not in watched]
         pred = np.take(pred, candidates)
         res = np.argpartition(pred, -k)[-k:]
@@ -81,10 +85,11 @@ class EASE:
                 "score": np.take(pred, res),
             }
         ).sort_values('score', ascending=False)
+        
         return r
     
 def dataload():
-    credential_path = 'key.json'
+    credential_path = '/opt/ml/level3_Final_project/final-project-level3-recsys-09/glassy-droplet-375219-9e50b4fc0381.json'
     credentials = service_account.Credentials.from_service_account_file(credential_path)
     client = bigquery.Client(credentials=credentials, project=credentials.project_id)
 
@@ -97,31 +102,36 @@ def dataload():
     return data, game
 
     
-def get_user(userid,api):
-    input_ = requests.get(f'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={api}&steamid={userid}&include_played_free_games=True&include_appinfo=True')
-    test = pd.DataFrame(input_.json()['response']['games'])
-    test = test[['appid','playtime_forever']]
-    test['userid'] = userid
-    test.columns = ['item_id','playtime_forever' ,'userid']
+def get_user(userid, playtime_forever, gameid_list):
+    data = {'userid': [str(userid)] * len(gameid_list), 'playtime_forever': playtime_forever, 'item_id' : [str(x) for x in gameid_list]}
+    test = pd.DataFrame(data)
     return test
 
-def train_predict(train, test, game): 
-    model = EASE()
+def inference(train, test, game, model): 
+    train.item_id = train.item_id.astype(str)
+    train.userid = train.userid.astype(str)
     train = pd.concat([train, test]).reset_index()
     train['rating'] = 1
     train.loc[train[train['playtime_forever']<=120].index,'rating'] = 0
+    print(train.columns)
     model.fit(train, 0.5, implicit=False)
-    output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 50)
-    list_ = game[(game['Genre'].str.contains('Indie', na=False)) & (game['Positive_Reviews']>=game['Negative_Reviews']*4) & (game['Positive_Reviews']+game['Negative_Reviews']<=50000)]['App_ID'].values
+    output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 1000)
+    print(output)
+    list_ = game[(game['Genre'].str.contains('Indie', na=False))]['App_ID'].values.astype(str)
+    print(list_)
     output = output[output['item_id'].isin(list_)]['item_id'].values
-    return output
+    print(output)
+    return output.tolist()
 
-def main():
-    userid=76561198117856251
-    train, game = dataload()
-    test = get_user(userid, api) 
-    output = train_predict(train, test, game)
-    return output
+# def main():
+#     userid=76561198117856251
+#     train, game = dataload()
+#     test = get_user(userid, api) 
+#     output = inference(train, test, game)
+#     return output
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
+
+def get_model():
+    return EASE
