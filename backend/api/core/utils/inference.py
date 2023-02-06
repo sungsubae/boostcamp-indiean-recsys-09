@@ -5,8 +5,9 @@ from typing import List
 from core.setting import config
 from schemas.recommend import RecommendCreate
 
-def request_recommendation(userid: int, history_list: List[int], playtime: int) -> List[RecommendCreate]:
-    user_history_data = {"userid": userid, "gameid_list": history_list, "playtime_forever": playtime}
+
+def request_recommendation(userid: int, history_list: List[int]) -> List[RecommendCreate]:
+    user_history_data = {"gameid_list": history_list}
 
     response = requests.post(config.infer.url, json=user_history_data)
     rec_list = response.json()["products"][0]["gameid_list"]

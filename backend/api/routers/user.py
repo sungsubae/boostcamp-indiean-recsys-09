@@ -31,6 +31,6 @@ def user_history(userid:int, db: Session=Depends(get_db)):
 
 
 @router.get("/recommends/{userid}", response_model=UserRecommendsDB)
-def user_recommend(userid:int, db: Session=Depends(get_db)):
+def user_history(userid:int, db: Session=Depends(get_db)):
     _user = user.get_user(db, userid)
     return _user
