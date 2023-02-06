@@ -54,13 +54,14 @@ def request_user_history(userid: int):
 
     if sum(user_history[1]) == 0:
         raise HTTPException(status_code=401, detail="스팀 프로필의 총 플레이타임이 비공개입니다.")
-
-    return [
-        HistoryCreate(
+    
+    _list = []
+    for g in response["response"]["games"]:
+        _h = HistoryCreate(
             userid=userid,
             gameid=g["appid"],
             playtime_total=g["playtime_forever"],
             rtime_last_played=g["rtime_last_played"],
         )
-        for g in response["response"]["games"]
-    ]
+        _list.append(_h)
+    return _list
