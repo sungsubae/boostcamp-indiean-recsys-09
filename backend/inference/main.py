@@ -9,11 +9,8 @@ from pandas import DataFrame
 
 from ml.Inference import inference
 from ml.model import NeuMF, get_model
-<<<<<<< HEAD
 
 from ml.ease import dataload, get_user, inference, EASE
-=======
->>>>>>> api
 
 app = FastAPI()
 
