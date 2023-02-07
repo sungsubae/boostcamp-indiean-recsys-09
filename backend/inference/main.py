@@ -7,14 +7,14 @@ from typing import List, Union, Optional, Dict, Any
 from datetime import datetime
 from pandas import DataFrame
 
-<<<<<<< Updated upstream
+
 from ml.Inference import inference
 from ml.model import NeuMF, get_model
 
 from ml.ease import dataload, get_user, inference, EASE
 =======
 from ml.ease import get_user, dataload, train_predict
->>>>>>> Stashed changes
+
 
 app = FastAPI()
 
@@ -97,7 +97,6 @@ async def make_order(input: RecSteamProduct):  # model, config 정의 필요, lo
     gameid_list = train_predict(train, test, game)
     # titles, images = get_model_rec(model = model, input_ids = input.games, top_k = input.top_k) #  model inference
     product = inferenceSteamProduct(gameid_list)
->>>>>>> Stashed changes
     products.append(product)
     
     new_order = Order(products=products)
