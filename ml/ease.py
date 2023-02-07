@@ -102,7 +102,6 @@ def dataload():
     return data, game
 
     
-<<<<<<< Updated upstream
 def get_user(userid, playtime_forever, gameid_list):
     data = {'userid': [str(userid)] * len(gameid_list), 'playtime_forever': playtime_forever, 'item_id' : [str(x) for x in gameid_list]}
     test = pd.DataFrame(data)
@@ -113,7 +112,6 @@ def get_user(userid, api):
     test = test[['appid','playtime_forever']]
     test['userid'] = userid
     test.columns = ['item_id','playtime_forever' ,'userid']
->>>>>>> Stashed changes
     return test
 
 def inference(train, test, game, model): 
