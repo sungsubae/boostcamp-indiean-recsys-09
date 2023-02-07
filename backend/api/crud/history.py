@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.dialects.postgresql import insert
 from typing import List
 
-from models import HistoryTable, UserTable
+from models import HistoryTable, GameTable
 from schemas import user, history
 
 def get_user_history(db: Session, q_user: user.UserInDB):
@@ -27,7 +27,9 @@ def add_user_history(db: Session, new_history: List[history.HistoryCreate]):
 
 # TODO: update or insert user history
 def upsert_user_history(db: Session, new_history: List[history.HistoryCreate]):
-    values = [_h.dict() for _h in new_history]
+    gameid_all = {g[0] for g in db.query(GameTable.id).all()}
+    # DB에 없는 game은 제외
+    values = [_h.dict() for _h in new_history if _h.gameid in gameid_all]
     stmt = insert(HistoryTable).values(values)
     primary_keys = ['userid','gameid']
     update_cols = {
