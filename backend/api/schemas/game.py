@@ -21,13 +21,13 @@ class GameInDB(BaseModel):
     genres : Optional[List[str]]
     tags : Optional[List[str]]
     categories : Optional[List[str]]
-    positive_review : int
-    negative_review : int
-    price : float
-    initial_price : float
-    discount : float
+    positive_review : Optional[int]
+    negative_review : Optional[int]
+    price : Optional[float]
+    initial_price : Optional[float]
+    discount : Optional[float]
     languages : Optional[List[str]]
-    platforms : List[str]
+    platforms : Optional[List[str]]
     release_date : Optional[datetime]
     required_age : Optional[str]
     header_image : Optional[str]
@@ -45,13 +45,13 @@ class Game(BaseModel):
     genres : Optional[List[str]]
     tags : Optional[List[str]]
     categories : Optional[List[str]]
-    positive_review : int
-    negative_review : int
-    price : float
-    initial_price : float
-    discount : float
+    positive_review : Optional[int]
+    negative_review : Optional[int]
+    price : Optional[float]
+    initial_price : Optional[float]
+    discount : Optional[float]
     languages : Optional[List[str]]
-    platforms : List[str]
+    platforms : Optional[List[str]]
     release_date : Optional[datetime]
     required_age : Optional[str]
     header_image : Optional[str]
