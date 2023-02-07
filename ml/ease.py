@@ -115,7 +115,7 @@ def inference(train, test, game, model):
     train.loc[train[train['playtime_forever']<=120].index,'rating'] = 0
     print(train.columns)
     model.fit(train, 0.5, implicit=False)
-    output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 1000)
+    output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 500)
     print(output)
     list_ = game[(game['Genre'].str.contains('Indie', na=False))]['App_ID'].values.astype(str)
     print(list_)
