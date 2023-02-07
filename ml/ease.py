@@ -105,6 +105,13 @@ def dataload():
 def get_user(userid, playtime_forever, gameid_list):
     data = {'userid': [str(userid)] * len(gameid_list), 'playtime_forever': playtime_forever, 'item_id' : [str(x) for x in gameid_list]}
     test = pd.DataFrame(data)
+=======
+def get_user(userid, api):
+    input_ = requests.get(f'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={api}&steamid={userid}&include_played_free_games=True&include_appinfo=True')
+    test = pd.DataFrame(input_.json()['response']['games'])
+    test = test[['appid','playtime_forever']]
+    test['userid'] = userid
+    test.columns = ['item_id','playtime_forever' ,'userid']
     return test
 
 def inference(train, test, game, model): 
@@ -115,7 +122,7 @@ def inference(train, test, game, model):
     train.loc[train[train['playtime_forever']<=120].index,'rating'] = 0
     print(train.columns)
     model.fit(train, 0.5, implicit=False)
-    output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 1000)
+    output = model.predict(test, test['userid'].unique(), train['item_id'].unique(), 500)
     print(output)
     list_ = game[(game['Genre'].str.contains('Indie', na=False))]['App_ID'].values.astype(str)
     print(list_)
