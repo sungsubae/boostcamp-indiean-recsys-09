@@ -1,0 +1,36 @@
+{% extends 'index.html' %}
+
+{% block title %}<title>기록없음</title>{% endblock %}
+{% block content %}
+<section id="main" class="mainview">
+    <div class="container">
+        <span class="viewtitle">룰베이스 <i class="fa-regular fa-thumbs-up"></i></span>
+
+        <div class="my-slider-box-1">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+
+                    {% for item in rule_games %}
+                    <div class="swiper-slide">
+                        <a href="gamepage/{{ item[0] }}">
+                            <img class="game-image" src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ item[0] }}/header.jpg" alt="">
+                            <div class="img-text">{{ item[1] }}</div>
+                        </a>
+                    </div>
+    
+                    {% endfor%}
+
+                </div>
+            </div>
+
+            <div class="my-slider-box-1__nav">
+                <!-- Add Arrows -->
+                <div class="my-slider-box-1__btn-left"><i class="fas fa-caret-left"></i></div>
+                <div class="my-slider-box-1__btn-right"><i class="fas fa-caret-right"></i></div>
+            </div>
+
+        </div>
+
+</section>
+
+{% endblock %}

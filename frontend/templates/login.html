@@ -1,67 +1,103 @@
-<!doctype html>
-<head><style>
-    html{height: 100%;}
-body{position: relative;width: 100%;height: 100%;}
-.logo_box{position: absolute;top: 50%;left: 50%;margin:-150px 0 0 -150px}
-</style></head>
-<html>
-<body>
-    로그인페이지
-    <div  class="logo_box">
-        {% block title %}
-            
-        {% endblock %}
-
-
-
-        {% block content %}
-
-{% endblock %}
-
-            {% if islogin == true %}
-            <div  class="logo_box">
-                <input type="submit" value="로그인완료">
-        <br>
-        <br>
-        <br>
-        <a href="https://steamcommunity.com/profiles/{{steam_id}}/edit/settings" target='_blank'>프로필공개하세요</a>
-        <form action="userpage/{{steam_id}}" method="post">
-        <input type="submit" value="시작">
-        </form>
-        <br>
-        <br>
-        <br>
-    
-
-            {% else %}
-            <form action="https://steamcommunity.com/openid/login" method="post">
-
-                <input type="hidden" name='openid.ns'         value= 'http://specs.openid.net/auth/2.0'/>
-                <input type="hidden" name='openid.mode'       value= 'checkid_setup'/>
-                <input type="hidden" name='openid.return_to'  value= 'http://0.0.0.0:8000/login'/>
-                <input type="hidden" name='openid.realm'      value= 'http://0.0.0.0'/>
-                <input type="hidden" name='openid.identity'   value= 'http://specs.openid.net/auth/2.0/identifier_select'/>
-                <input type="hidden" name='openid.claimed_id' value= 'http://specs.openid.net/auth/2.0/identifier_select'/>
-        
-            <input type="submit" value="로그인">
-            </form>
-            {% endif %}
-
-
-       
-</div>
-</body>
-</html>
-
-
+<!DOCTYPE HTML>
 <!--
-login -> base.html
-
-loginstep1-> steam회원 or 비회원
-    회원이면 로그인 페이지로 이동 후 다시 돌아오면 프로필 공개설정 할 수 있게
-    비회원이면 큐레이션 페이지로 이동하게
-
-loginstep2-> 프로필 공개 설정
-    프로필 공개가 맞으면 시작버튼 눌렀을 때 유저페이지로 이동
-    프로필 공개가 아니면 안넘어가고 프로필 공개 하라고 메시지 전달
+	Strongly Typed by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
+<html>
+
+<head>
+	<title>Strongly Typed by HTML5 UP</title>
+	<meta charset="utf-8" />
+
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v2.1.9/css/unicons.css" />
+	<link rel="stylesheet" href="{{ url_for('static', path='/css/login.css') }}" />
+
+</head>
+
+<body>
+
+
+	<div class="section">
+		<div class="container">
+			<div class="imgbox">
+				<img class="logo" src="{{ url_for('static', path='/images/Indie안(배경없음)_WB.png') }}" alt="">
+			</div>
+			<div class="section pb-5 pt-5 pt-sm-2 text-center">
+
+				<h6 class="mb-0 pb-3"><span class="upbar"><i class="fa-brands fa-steam"></i>&nbsp MEMBER </span><span
+						class="upbar"><i class="fa-sharp fa-solid fa-circle-user"></i>&nbsp GUEST</span></h6>
+				<input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+				<label for="reg-log"></label>
+				<div class="card-3d-wrap mx-auto">
+					<div class="card-3d-wrapper">
+						<div class="card-front">
+							<div class="center-wrap">
+								<div class="section text-center">
+									<h4 class="mb-4 pb-3"> MEMBER</h4>
+									{% if islogin == true %}
+									LOGIN SUCCESS
+
+									<p class="mb-0 mt-4 text-center underline text-k"><a
+											href="https://steamcommunity.com/profiles/{{steam_id}}/edit/settings"
+											target='_blank' class="link">프로필 설정을 공개로 바꿔주세요</a></p>
+											<a href="/index" class="btn mt-4">START</a>
+
+
+									{% else %}
+									<form action="https://steamcommunity.com/openid/login" method="post">
+
+										<input type="hidden" name='openid.ns'
+											value='http://specs.openid.net/auth/2.0' />
+										<input type="hidden" name='openid.mode' value='checkid_setup' />
+										<input type="hidden" name='openid.return_to' value='{{url}}/login' />
+										<input type="hidden" name='openid.realm' value='{{domain}}' />
+										<input type="hidden" name='openid.identity'
+											value='http://specs.openid.net/auth/2.0/identifier_select' />
+										<input type="hidden" name='openid.claimed_id'
+											value='http://specs.openid.net/auth/2.0/identifier_select' />
+
+										<button class="btn mt-4"> <i class="fa-brands fa-steam"></i>&nbsp LOGIN WITH
+											STEAM </button>
+
+									</form>
+
+									{% endif %}
+
+								</div>
+							</div>
+						</div>
+						<div class="card-back">
+							<div class="center-wrap">
+								<div class="section text-center">
+									<h4 class="mb-4 pb-3"> GUEST</h4>
+									<p class="mb-0 mt-4 text-center text-k">더 나은 추천결과와 서비스이용을 위해 스팀 로그인을 해주세요.</p>
+									<p class="mb-0 mt-4 text-center text-k">스팀 아이디가 없는 경우 비회원으로 서비스를 이용할 수 있습니다.</p>
+
+									<a href="/index" class="btn mt-4">START</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="../static/js/jquery.buoyant.min.js"></script>
+<script>
+	jQuery("body").buoyant({
+		numberOfItems: 30,
+		minRadius: 5,
+		maxRadius: 25,
+		elementClass: 'circles',
+		colliding: true
+	});
+</script>
+
+</html>
