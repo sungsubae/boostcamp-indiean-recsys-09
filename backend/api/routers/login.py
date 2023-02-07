@@ -32,7 +32,7 @@ def user_login(userid: UserBase, db: Session = Depends(get_db)) -> bool:
         _user = update_user_update_time(db, _user)
     
     # 추천결과가 없거나 갱신한지 하루가 지났다면 api로 가져와 DB에 저장
-    if _user.recommend_time == None or (datetime.utcnow() - _user.recommend_time).days >= 0:
+    if _user.recommend_time == None or (datetime.utcnow() - _user.recommend_time).days >= 1:
         if _history_list == None:
             _history_list = get_user_history(db, _user)
         gameid_list = [h.gameid for h in _history_list]
