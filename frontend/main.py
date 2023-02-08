@@ -7,7 +7,9 @@ import requests
 import uvicorn
 import os
 import typing
-temp=[[1680880,'Forspoken'],
+
+
+TEMP=[[1680880,'Forspoken'],
                            [1809700,'Persona 3 Portable'],
                            [1036240,'Definitely Not Fried Chicken'],
                            [1172470,'Apex Legends'],
@@ -56,9 +58,8 @@ def loginpage(request: Request):
 @app.get("/index")
 def index(request: Request):
     steam_id=request.session['steamid']
-    print(steam_id)
     if steam_id == None:
-        rule_games=temp
+        rule_games=totalgame()
         return templates.TemplateResponse('history_false.html',context={"request":request,"isexist":False,"rule_games":rule_games})
     else:
         history=True #TODO API
@@ -68,16 +69,14 @@ def index(request: Request):
             rec_games=[]
             for i in recommends:
                 rec_games.append([i['game']['id'],i['game']['name']])
-            # rec_games=temp
+            
             return templates.TemplateResponse('history_true.html', context={"request":request,"isexist":True,"rec_games":rec_games})
 
         else:
         
-            rule_games=temp
+            rule_games=totalgame()
             return templates.TemplateResponse('history_false.html', context={"request":request,"isexist":True,"rule_games":rule_games})
 
 
-
-
-# if __name__=="__main__":              
-#     uvicorn.run(app, host="0.0.0.0", port=8000)
+def totalgame():
+    return TEMP

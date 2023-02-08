@@ -2525,3 +2525,34 @@ input, select, textarea {
   .my-slider-box-1 .my-slider-box-1__btn-right.swiper-button-disabled {
 	opacity:0.3;
   }
+
+.game-wrapper {
+	margin-top:10px;
+	margin-bottom: 50px;
+}
+
+
+.card {
+	background: gray;
+	border-radius: 2px;
+	display: inline-block;
+	height: 150px;
+	width:280px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top:10px;
+	margin-bottom:10px;
+	transition:box-shadow 0.3s;
+}
+
+.card:hover {
+	box-shadow:0 20px 38px rgba(0,0,0,0.3),
+		0 10px 10px rgba(0,0,0,0.3);
+}
+
+.search-area{
+	font-family: 'GongGothicMedium';
+	font-style: normal;
+	font-size: 17px;
+	padding-left: 10px;
+}
