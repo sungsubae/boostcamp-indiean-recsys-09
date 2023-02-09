@@ -7,22 +7,15 @@ from typing import List, Union, Optional, Dict, Any
 from datetime import datetime
 from pandas import DataFrame
 
-
 from ml.Inference import inference
 from ml.model import NeuMF, get_model
 
 from ml.ease import dataload, get_user, inference, EASE
-=======
-from ml.ease import get_user, dataload, train_predict
-
 
 app = FastAPI()
 
 '''
-
 Login Part -> Backend Part로 전향
-
-
 '''
 
 ############################class 정의 ###################################
@@ -52,7 +45,6 @@ class inferenceSteamProduct(Product):
 ############# Inferenece 서버 구축###########
 # orders = [] #  DB 수정 필요
 
-<<<<<<< Updated upstream
 @app.post("/recomNeu", description = "로그인 정보 요청합니다.")
 async def make_order(input: RecSteamProduct,
                                     model: NeuMF=Depends(get_model)):  # model, config 정의 필요, load_model 필요
@@ -86,17 +78,6 @@ async def make_order(input: RecSteamProduct,
     gameid_list = inference(train, test, games, EASE())
     # input 인자 이와 같이 명시
     product = inferenceSteamProduct(gameid_list = gameid_list)
-=======
-@app.post("/recom", description = "로그인 정보 요청합니다.")
-async def make_order(input: RecSteamProduct):  # model, config 정의 필요, load_model 필요
-    train, game = dataload()
-    api =  "F644C6E2851DBDC938FF6FC70388451F"
-    test = get_user(userid, api)
-    products = []
-    # TODO 1: Recommend List
-    gameid_list = train_predict(train, test, game)
-    # titles, images = get_model_rec(model = model, input_ids = input.games, top_k = input.top_k) #  model inference
-    product = inferenceSteamProduct(gameid_list)
     products.append(product)
     
     new_order = Order(products=products)
