@@ -70,6 +70,8 @@ FastAPI를 통해 구현, 크게 **API Server**와 **Inference Server** 분류
 ## 6. CICD
 
 ### Github action & Slack
+![CICD_Architecture_](https://user-images.githubusercontent.com/28619804/217706048-fa7696c1-01ae-4d2b-8d6b-c54860653aa0.png)
+
 - **Docker & Github Action** : 백엔드와 프론트엔드를 도커를 이용해 이미지를 빌드하여, GCP 환경 VM에 업로드 진행 및 Github Action을 활용하여 CI/CD 환경 구축
 - **Slack 알림 기능 :** 협업을 위해 Github Action의 결과를 Slack에도 알림을 갈 수 있도록 하는 기능을 Github Action에서 구축
        
