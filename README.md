@@ -1,6 +1,6 @@
 ![sdfds2](https://user-images.githubusercontent.com/75313644/217699370-333fccd7-2a50-43bd-ae01-9517db260b0d.png)
 # IndieAn - 인디게임 추천
-### 🎮 유저의 Steam 히스토리를 사용해, 유저에게 맞춤형 **인디게임**을 추천해주는 서비스 **IndieAn**입니다.   
+### 🎮 유저에게 맞춤형 **인디게임**을 추천해주는 서비스 **IndieAn**입니다.   
 ## 1. 기획
 
 ### **문제인식**
