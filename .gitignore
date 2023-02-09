@@ -9,3 +9,13 @@ test.ipynb
 
 # 실행파일
 Makefile
+
+# key file
+glassy-droplet-375219-9e50b4fc0381.json
+
+#
+testcode.py
+
+#data
+useritem.csv
+*.csv

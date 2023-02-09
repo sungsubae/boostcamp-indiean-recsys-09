@@ -1,163 +1,116 @@
 <!DOCTYPE HTML>
+<!--
+	Strongly Typed by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.8.4/swiper-bundle.min.css" />
+	</head>
+	<body class="homepage is-preload">
+		<div id="page-wrapper">
 
-<head>
-    <style>
-        .slides>input[name=ra] {
-            display: none;
-        }
+            <!-- main -->
+			{% block content %}
 
-        .slides {
-            width: 300px;
-            display: flex;
-            overflow: hidden;
-        }
- 
-        .sl {
-            position: relative;
-            transition: 1s;
-        }
-
-        #ra01:checked~.sl {
-            left: 0;
-        }
-
-        #ra02:checked~.sl {
-            left: -100%;
-        }
-
-        #ra03:checked~.sl {
-            left: -100%;
-        }
-
-        #ra04:checked~.sl {
-            left: -300%;
-        }
-
-        .page {
-            width: 300px;
-            text-align: center;
-        }
-    </style>
-    <title>스팀게임추천</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}" />
-    <noscript>
-        <link rel="stylesheet" href="{{ url_for('static', path='/css/noscript.css') }}" /></noscript>
-</head>
-
-<body>
-    <header id="header">
-
-        <div style="border: 1px solid rgb(255, 255, 255); float: left; width: 20%;">
-            <a href="index.html">
-                <h1>LOGO</h1>
-            </a>
-        </div>
-        <div style="border: 1px solid rgb(255, 255, 255); float: left; width: 20%;">
-            Menu1
-        </div>
-        <div style="border: 1px solid rgb(255, 255, 255); float: left; width: 20%;">
-            Menu2
-        </div>
-        <div style="border: 1px solid rgb(255, 255, 255); float: left; width: 20%;">
-            Menu3
-        </div>
-
-
-    </header>
-
-    <!-- Search -->
-    <section>
-        <a href="./login">
-            <input type="submit" value="로그인">
-        </a>
-            
-    </section>
- 
-    <section>
-        <div class="slide">
-
-            <div class="slides">
-                <input type="radio" id="ra01" name="ra" value="" checked>
-                <input type="radio" id="ra02" name="ra" value="">
-                <input type="radio" id="ra03" name="ra" value="">
-                <input type="radio" id="ra04" name="ra" value="">
-
-                <div class="sl">
-                    <img src="http://via.placeholder.com/300/000000/ffffff ?text=content1" alt="">
-                </div>
-
-                <div class="sl">
-                    <img src="http://via.placeholder.com/300/550000/ffffff ?text=content2" alt="">
-                </div>
-
-                <div class="sl">
-                    <img src="http://via.placeholder.com/300/aa0000/ffffff ?text=content3" alt="">
-                </div>
-
-                <div class="sl">
-                    <img src="http://via.placeholder.com/300/ff0000/ffffff ?text=content4" alt="">
-                </div>
-
+			{% endblock %}
             </div>
 
-            <div class="page">
-                <label for="ra01">●</label>
-                <label for="ra02">●</label>
-                <label for="ra03">●</label>
-                <label for="ra04">●</label>
-            </div>
+           	<!-- Scripts -->
+			{% block script %}
+                <script src="static/js/jquery.min.js"></script>
+                <script src="static/js/jquery.dropotron.min.js"></script>
+                <script src="static/js/browser.min.js"></script>
+                <script src="static/js/breakpoints.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.8.4/swiper-bundle.min.js"></script>
+                <script src="static/js/util.js"></script>
+                <script>
+					(function($) {
 
-    </section>
+						var	$window = $(window),
+							$body = $('body');
+					
+						// Breakpoints.
+							breakpoints({
+								xlarge:  [ '1281px',  '1680px' ],
+								large:   [ '981px',   '1280px' ],
+								medium:  [ '737px',   '980px'  ],
+								small:   [ null,      '736px'  ]
+							});
+					
+						// Play initial animations on page load.
+							$window.on('load', function() {
+								window.setTimeout(function() {
+									$body.removeClass('is-preload');
+								}, 100);
+							});
+					
+						// Dropdowns.
+							$('#nav > ul').dropotron({
+								mode: 'fade',
+								noOpenerFade: true,
+								hoverDelay: 150,
+								hideDelay: 350
+							});
+					
+						// Nav.
+					
+							// Title Bar.
+								$(
+									'<div id="titleBar">' +
+										'<a href="#navPanel" class="toggle"></a>' +
+									'</div>'
+								)
+									.appendTo($body);
+					
+							// Panel.
+								$(
+									'<div id="navPanel">' +
+										'<nav>' +
+											$('#nav').navList() +
+										'</nav>' +
+									'</div>'
+								)
+									.appendTo($body)
+									.panel({
+										delay: 500,
+										hideOnClick: true,
+										hideOnSwipe: true,
+										resetScroll: true,
+										resetForms: true,
+										side: 'left',
+										target: $body,
+										visibleClass: 'navPanel-visible'
+									});
+					
+					})
+					(jQuery);
+					
+					function recSlider() {
+						var swiper = new Swiper('.my-slider-box-1 .swiper-container', {
+						  slidesPerView:4,
+						  spaceBetween:15,
+						  slidesPerGroup : 4,
+						  
+						  loop: false,
+						  navigation: {
+							nextEl: '.my-slider-box-1 .my-slider-box-1__btn-right',
+							prevEl: '.my-slider-box-1 .my-slider-box-1__btn-left',
+						  },
+						});
+					  }
+					  
+					  
+					recSlider();
+				</script>
+				
+				{% endblock %}
+        </body>
+    </html>
 
 
-    <!-- Main -->
-    <section id="main">
-
-        <h2>
-            추천게임(룰베이스)
-        </h2>
-
-        <!-- Items -->
-        <div class="items">
-            {% for item in rule_based %}
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">{{ item[1] }}</h2><a href="http://0.0.0.0:8000/gamepage/{{ item[0] }}"><img
-                        src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ item[0] }}/header.jpg" alt=""></a>
-            </article>
-            {% endfor%}
-
-        </div>
-
-
-        <h2>
-            신규게임
-        </h2>
-
-        <!-- Items -->
-        <div class="items">
-
-            {% for item in new_games %}
-            <article class="item thumb span-1">
-                <h2 style="color: azure;">{{ item[1] }}</h2><a href="http://0.0.0.0:8000/gamepage/{{ item[0] }}"><img
-                        src="https://cdn.cloudflare.steamstatic.com/steam/apps/{{ item[0] }}/header.jpg" alt=""></a>
-            </article>
-            {% endfor%}
-        </div>
-        
-    </div>
-
-    <!-- Scripts -->
-    <script src="../static/js/jquery.min.js"></script>
-    <script src="../static/js/jquery.poptrox.min.js"></script>
-    <script src="../static/js/browser.min.js"></script>
-    <script src="../static/js/breakpoints.min.js"></script>
-    <script src="../static/js/util.js"></script>
-    <script src="../static/js/main.js"></script>
-
-
-</body>
-
-</html>

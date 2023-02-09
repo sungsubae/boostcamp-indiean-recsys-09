@@ -3,119 +3,70 @@ from fastapi.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from starlette.middleware import Middleware
 from starlette.middleware.sessions import SessionMiddleware
-
+import requests
 import uvicorn
 import os
 import typing
 
+
+TEMP=[[1139890,'Dictators:No Peace Countryballs'],
+    [1082710,'Bug Fables: The Everlasting Sapling'],
+    [743390,'DISTRAINT 2'],
+    [1717640,'Kill It With Fire'],
+    [1293180,'SuchArt: Genius Artist Simulator'],
+    [1018800,'DEEEER Simulator: Your Average Everyday Deer Game'],
+    [1726400,'The Death | Thần Trùng'],
+    [986800,'AVICII Invector'],
+    [1164050,'When The Past Was Around'],
+    [344770,'fault - milestone two side:above']]
 middleware = [
  Middleware(SessionMiddleware, secret_key='super-secret')
 ]
 app = FastAPI(middleware=middleware)
-
-fake_db=dict()
-fake_db['user']=[]
-#appid, gamename, gameimageurl
-fake_db['ruleBasedItems']=[[730,'Counter-Strike: Global Offensive'],
-                           [570,'Dota 2'],
-                           [578080,'PUBG: BATTLEGROUNDS'],
-                           [1172470,'Apex Legends'],
-                           [1568590,'Goose Goose Duck'],
-                           [271590,'Grand Theft Auto V'],
-                           [431960,'Wallpaper Engine'],
-                           [440,'Team Fortress 2'],
-                           [1938090,'Call of Duty®: Modern Warfare® II | Warzone™ 2.0'],
-                           [1203220,'NARAKA: BLADEPOINT']]
-
-fake_db['newItems']=[[1680880,'Forspoken'],
-                           [1809700,'Persona 3 Portable'],
-                           [1036240,'Definitely Not Fried Chicken'],
-                           [1172470,'Apex Legends'],
-                           [1717640,'Mahokenshi'],
-                           [271590,'Grand Theft Auto V'],
-                           [431960,'Wallpaper Engine'],
-                           [440,'Team Fortress 2'],
-                           [1938090,'Call of Duty®: Modern Warfare® II | Warzone™ 2.0'],
-                           [1203220,'NARAKA: BLADEPOINT']]
-fake_db['recResults']=[[431960,'Wallpaper Engine'],
-                           [440,'Team Fortress 2'],
-                           [1938090,'Call of Duty®: Modern Warfare® II | Warzone™ 2.0'],
-                           [1203220,'NARAKA: BLADEPOINT'],
-                           [1568590,'Goose Goose Duck'],
-                           [271590,'Grand Theft Auto V'],
-                           [431960,'Wallpaper Engine'],
-                           [440,'Team Fortress 2'],
-                           [1938090,'Call of Duty®: Modern Warfare® II | Warzone™ 2.0'],
-                           [1203220,'NARAKA: BLADEPOINT']]
-
-def flash(request: Request, message: typing.Any) -> None:
-   if "_messages" not in request.session:
-       request.session["_messages"] = []
-       request.session["_messages"].append({"message": message})
-def get_flashed_messages(request: Request):
-   print("session",request.session)
-   return request.session.pop("_messages") if "_messages" in request.session else []
-
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR,"static")), name="static")
 templates=Jinja2Templates(directory=os.path.join(BASE_DIR,"templates"))
-templates.env.globals['get_flashed_messages'] = get_flashed_messages
+server_url=""
+@app.get("/login")
+def loginpage(request: Request):
+    islogin=False
+    steam_id=None
+    request.session['steamid']=None
+    url="http://0.0.0.0:8000" #로그인 후 돌아올 경로
+    domain="http://0.0.0.0" #도메인 영역
+    
+    if request.query_params:
+        steam_id=request.query_params['openid.identity'][-17:]
+        request.session['steamid']=request.query_params['openid.identity'][-17:]
+        islogin=True
+        param={"id":int(request.session['steamid'])}
+        res=requests.post(url=f'{server_url}/login/checkdb',json=param)
+        print("로그인 부분: ",res.status_code)
+    return templates.TemplateResponse('login.html', context={"request":request,"islogin":islogin,"steam_id":steam_id,"url":url,"domain":domain})
+
 
 @app.get("/index")
 def index(request: Request):
-    #TODO DB
-    print(request.session)
-    rule_based=fake_db['ruleBasedItems']
-    new_games=fake_db['newItems']
+    steam_id=request.session['steamid']
+    if steam_id == None:
+        rule_games=totalgame()
+        return templates.TemplateResponse('history_false.html',context={"request":request,"isexist":False,"rule_games":rule_games})
+    else:
+        history=True #TODO API
+        if history:
+            res=requests.get(url=f'{server_url}/user/recommends/{steam_id}')
+            recommends=res.json()['recommends']
+            rec_games=[]
+            for i in recommends:
+                rec_games.append([i['game']['id'],i['game']['name']])
+            
+            return templates.TemplateResponse('history_true.html', context={"request":request,"isexist":True,"rec_games":rec_games})
 
-    return templates.TemplateResponse('index.html', context={"request":request,"rule_based":rule_based,"new_games":new_games})
-
-
-@app.get("/login")
-async def loginpage(request: Request):
-    #프로필 공개여부 계속 확인하다가 공개가 되면 유저정보 받아오기 + db에 저장
-    islogin=False
-    steam_id=None
-    if request.query_params:
-        steam_id=request.query_params['openid.identity'][-17:]
-        request.session['steamid']=steam_id
-        islogin=True
-        #TODO if isopen이면 유저 프로필 받아와서 db에 값 넘겨주기
-        fake_db['user'].append(steam_id)
-        print(fake_db['user'])
-    return templates.TemplateResponse('login.html', context={"request":request,"islogin":islogin,"steam_id":steam_id})
-
-@app.post("/login")
-async def loginpage(request:Request):
-    print("STEAM ID: ",request.session['steamid'])
-    ispulic=False
-    if not ispulic:
-        flash(request,"public please")
-        return templates.TemplateResponse('login.html', context={"request":request,"ispulic":ispulic})
-    return templates.TemplateResponse('login.html', context={"request":request,"ispulic":ispulic})
+        else:
+        
+            rule_games=totalgame()
+            return templates.TemplateResponse('history_false.html', context={"request":request,"isexist":True,"rule_games":rule_games})
 
 
-@app.post("/mypage/{user_id}")
-def mypage(request: Request):
-    
-    return templates.TemplateResponse('mypage.html', context={"request":request})
-
-
-@app.post("/userpage/{user_id}")
-def userpage(request: Request,user_id):
-    #TODO DB
-    rec_results=fake_db['recResults']
-    return templates.TemplateResponse('userpage.html', context={"request":request,"user_id":user_id,"rec_results":rec_results})
-
-@app.get("/gamepage/{game_id}")
-def gamepage(request: Request):
-    return templates.TemplateResponse('gamepage.html', context={"request":request})
-
-@app.post("/gamepage/{game_id}")
-def gamepage(request: Request,user_id,game_id):
-    
-    print(f"{user_id},{game_id}")
-    
-    return templates.TemplateResponse('gamepage.html', context={"request":request})
-
-    
+def totalgame():
+    return TEMP

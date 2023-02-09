@@ -1,29 +1,36 @@
 from datetime import datetime
 
 from pydantic import BaseModel, Field, validator
-from typing import List
+from typing import List, Optional
+
+
+class GameBaseDB(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
 
 
 class GameInDB(BaseModel):
     id : int
     name : str
-    decription : str
-    developer : str
-    publisher : str
-    genres : List[str]
-    tags : List[str]
-    types : List[str]
-    categories : List[str]
-    positive_review : int
-    negative_review : int
-    price : float
-    initial_price : float
-    discount : float
-    languages : List[str]
-    platforms : List[str]
-    release_date : datetime
-    required_age : int
-    header_image : str
+    description : Optional[str]
+    developer : Optional[str]
+    publisher : Optional[str]
+    genres : Optional[List[str]]
+    tags : Optional[List[str]]
+    categories : Optional[List[str]]
+    positive_review : Optional[int]
+    negative_review : Optional[int]
+    price : Optional[float]
+    initial_price : Optional[float]
+    discount : Optional[float]
+    languages : Optional[List[str]]
+    platforms : Optional[List[str]]
+    release_date : Optional[datetime]
+    required_age : Optional[str]
+    header_image : Optional[str]
 
     class Config:
         orm_mode = True
@@ -32,28 +39,28 @@ class GameInDB(BaseModel):
 class Game(BaseModel):
     id : int
     name : str
-    decription : str
-    developer : str
-    publisher : str
-    genres : List[str]
-    tags : List[str]
-    types : List[str]
-    categories : List[str]
-    positive_review : int
-    negative_review : int
-    price : float
-    initial_price : float
-    discount : float
-    languages : List[str]
-    platforms : List[str]
-    release_date : datetime
-    required_age : int
-    header_image : str
+    description : Optional[str]
+    developer : Optional[str]
+    publisher : Optional[str]
+    genres : Optional[List[str]]
+    tags : Optional[List[str]]
+    categories : Optional[List[str]]
+    positive_review : Optional[int]
+    negative_review : Optional[int]
+    price : Optional[float]
+    initial_price : Optional[float]
+    discount : Optional[float]
+    languages : Optional[List[str]]
+    platforms : Optional[List[str]]
+    release_date : Optional[datetime]
+    required_age : Optional[str]
+    header_image : Optional[str]
 
     @validator("id","name")
     def not_none(cls, v):
-        if not v:
+        if v == None:
             raise ValueError(f"{cls}에 빈 값은 허용되지 않습니다.")
+        return v
 
 
 class GameList(BaseModel):
