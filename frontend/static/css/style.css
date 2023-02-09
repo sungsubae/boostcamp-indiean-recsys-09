@@ -1,0 +1,282 @@
+/*!
+ * jQuery ComboTree Plugin 
+ * Author:  Erhan FIRAT
+ * Mail:    erhanfirat@gmail.com
+ * Licensed under the MIT license
+ * Version: 1.2.1
+ */
+
+ @font-face {
+    font-family: 'Happiness-Sans-Title';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205@1.0/Happiness-Sans-Title.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: '-KITA-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/-KITA-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --ct-bg: #fff;
+    --ct-btn-hover: #e8e8e8;
+    --ct-btn-active: #ddd;
+    --ct-btn-color: #555;
+    --ct-border-color: #e1e1e1;
+    --ct-border-radius: 5px;
+    --ct-tree-hover: #efefef;
+    --ct-selection: #418EFF;
+    --ct-padding: 8px;
+}
+
+
+.comboTreeWrapper{
+	position: relative;
+	text-align: left !important;
+}
+
+.comboTreeInputWrapper{
+	position: relative;
+}
+
+.comboTreeArrowBtn {
+	position: absolute;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    box-sizing: border-box;
+    border: 1px solid var(--ct-border-color);
+    border-radius: 0 var(--ct-border-radius) var(--ct-border-radius) 0;
+    background: var(--ct-border-color);
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+.comboTreeArrowBtn:hover {
+    background: var(--ct-btn-hover);
+}
+.comboTreeArrowBtn:active {
+    background: var(--ct-btn-active);
+}
+.comboTreeInputBox:focus + .comboTreeArrowBtn {
+    color: var(--ct-btn-color);
+    border-top: 1px solid var(--ct-selection);
+    border-right: 1px solid var(--ct-selection);
+    border-bottom: 1px solid var(--ct-selection);
+}
+
+.comboTreeArrowBtnImg{
+    font-size: 1.25rem;
+}
+
+.comboTreeDropDownContainer {
+	display: none;
+	background: var(--ct-bg);
+	border: 1px solid var(--ct-border-color);
+	position: absolute;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 999;
+	max-height: 250px;
+	overflow-y: auto;
+}
+
+.comboTreeDropDownContainer ul{
+	padding: 0px;
+	margin: 0;
+}
+
+.comboTreeDropDownContainer li{
+	list-style-type: none;
+	padding-left: 15px;
+}
+
+.comboTreeDropDownContainer li .selectable{
+	cursor: pointer;
+}
+
+.comboTreeDropDownContainer li .not-selectable{
+	cursor: not-allowed;
+}
+
+
+.comboTreeDropDownContainer li:hover{
+	background-color: var(--ct-tree-hover);}
+.comboTreeDropDownContainer li:hover ul{
+	background-color: var(--ct-bg)}
+.comboTreeDropDownContainer li span.comboTreeItemTitle.comboTreeItemHover,
+.comboTreeDropDownContainer label.comboTreeItemHover
+{
+	background-color: var(--ct-selection);
+	color: var(--ct-bg);
+    border-radius: 2px;
+}
+
+span.comboTreeItemTitle, .comboTreeDropDownContainer .selectAll{
+	display: block;
+    padding: 3px var(--ct-padding);
+}
+.comboTreeDropDownContainer label{
+    cursor: pointer;
+	width: 100%;
+    display: block;
+}
+.comboTreeDropDownContainer .comboTreeItemTitle input,
+.comboTreeDropDownContainer .selectAll input {
+	position: relative;
+    top: 2px;
+	margin: 0px 4px 0px 0px;
+}
+.comboTreeParentPlus{
+    position: relative;
+    left: -12px;
+    top: 4px;
+    width: 4px;
+    float: left;
+		cursor: pointer;
+}
+
+
+.comboTreeInputBox {
+	padding: var(--ct-padding);
+    border-radius: var(--ct-border-radius);
+    border: 1px solid var(--ct-border-color);
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 24px;
+}
+.comboTreeInputBox:focus {
+    border: 1px solid var(--ct-selection);
+    outline-width: 0;
+}
+
+
+.multiplesFilter{
+	width: 100%;
+	padding: 5px;
+	box-sizing: border-box;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px solid var(--ct-border-color);
+}
+
+  .range__value {
+    width: 35%;
+    margin-left: 45px;    
+    text-align: center;
+    border-left: #e6e4e4 1px solid;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+  }
+  
+  .form-group label {
+    text-transform: uppercase;
+    font-size: .7rem;
+    color: #222;
+    margin-bottom: 5px;
+  }
+  
+  .form-group span {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #3c3b3b;
+
+    font-family: 'Happiness-Sans-Title';
+  }
+  
+  .range__slider label {
+    margin-bottom: 10px;
+  }
+  
+  .range__slider [type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 13px;
+    border-radius: 6px;
+    background: #f1f1f1;
+    outline: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* custom thumb */
+  .range__slider [type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #f0932b;
+    border: #f9ca24 5px solid;
+    cursor: pointer;
+  }
+  
+  .range__slider [type="range"]::-webkit-slider-thumb:hover {
+    background: #f0932b;
+  }
+  
+  .range__slider [type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border: 0;
+    border-radius: 50%;
+    background: #f0932b;
+    border: #f9ca24 5px solid; cursor: pointer;
+  }
+  
+  .range__slider [type="range"]::-moz-range-thumb:hover {
+    background: #f9ca24;
+  }
+  
+table {
+    padding-top: 20px;
+    font-family: 'Happiness-Sans-Title';
+    font-size: 10px !important;
+    width: 100%;
+  }
+
+  .img-text2{
+    font-family: 'Happiness-Sans-Title';
+    font-weight: bold;
+    position: static;
+  }
+
+h3{
+    font-family: 'Happiness-Sans-Title';
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+input{
+    font-family: '-KITA-Regular';
+    font-size: 13px;
+    font-weight: normal;
+    color: black;
+}
+
+.search-area{
+    font-family: '-KITA-Regular';
+    font-size: 13px;
+    vertical-align: unset;
+}
+
+.range{
+    display: inline-block;
+}
+
+.range__slider {
+    width: 130%;
+  }
+
+.mainview {
+    height: 1000px;
+}

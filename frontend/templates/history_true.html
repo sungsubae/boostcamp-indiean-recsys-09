@@ -1,6 +1,8 @@
 {% extends 'index.html' %}
-{% block title %}<title>기록존재</title>{% endblock %}
 
+{% block head %}
+  {{ super() }}
+{% endblock %}
 
 {% block content %}
 <section id="main" class="mainview">
@@ -36,5 +38,8 @@
     </div>
 
 </section>
+{% endblock %}
 
+{% block script %}
+  {{ super() }}
 {% endblock %}

@@ -7,26 +7,18 @@ import requests
 import uvicorn
 import os
 import typing
-temp=[[1680880,'Forspoken'],
-                           [1809700,'Persona 3 Portable'],
-                           [1036240,'Definitely Not Fried Chicken'],
-                           [1172470,'Apex Legends'],
-                           [1717640,'Mahokenshi'],
-                           [271590,'Grand Theft Auto V'],
-                           [431960,'Wallpaper Engine'],
-                           [440,'Team Fortress 2'],
-                           [1938090,'Call of Duty®: Modern Warfare® II | Warzone™ 2.0'],
-                           [1203220,'NARAKA: BLADEPOINT'],
-                           [730,'Counter-Strike: Global Offensive'],
-                           [570,'Dota 2'],
-                           [578080,'PUBG: BATTLEGROUNDS'],
-                           [1172470,'Apex Legends'],
-                           [1568590,'Goose Goose Duck'],
-                           [271590,'Grand Theft Auto V'],
-                           [431960,'Wallpaper Engine'],
-                           [440,'Team Fortress 2'],
-                           [1938090,'Call of Duty®: Modern Warfare® II | Warzone™ 2.0'],
-                           [1203220,'NARAKA: BLADEPOINT']]
+
+
+TEMP=[[1139890,'Dictators:No Peace Countryballs'],
+    [1082710,'Bug Fables: The Everlasting Sapling'],
+    [743390,'DISTRAINT 2'],
+    [1717640,'Kill It With Fire'],
+    [1293180,'SuchArt: Genius Artist Simulator'],
+    [1018800,'DEEEER Simulator: Your Average Everyday Deer Game'],
+    [1726400,'The Death | Thần Trùng'],
+    [986800,'AVICII Invector'],
+    [1164050,'When The Past Was Around'],
+    [344770,'fault - milestone two side:above']]
 middleware = [
  Middleware(SessionMiddleware, secret_key='super-secret')
 ]
@@ -56,9 +48,8 @@ def loginpage(request: Request):
 @app.get("/index")
 def index(request: Request):
     steam_id=request.session['steamid']
-    print(steam_id)
     if steam_id == None:
-        rule_games=temp
+        rule_games=totalgame()
         return templates.TemplateResponse('history_false.html',context={"request":request,"isexist":False,"rule_games":rule_games})
     else:
         history=True #TODO API
@@ -68,16 +59,14 @@ def index(request: Request):
             rec_games=[]
             for i in recommends:
                 rec_games.append([i['game']['id'],i['game']['name']])
-            # rec_games=temp
+            
             return templates.TemplateResponse('history_true.html', context={"request":request,"isexist":True,"rec_games":rec_games})
 
         else:
         
-            rule_games=temp
+            rule_games=totalgame()
             return templates.TemplateResponse('history_false.html', context={"request":request,"isexist":True,"rule_games":rule_games})
 
 
-
-
-# if __name__=="__main__":              
-#     uvicorn.run(app, host="0.0.0.0", port=8000)
+def totalgame():
+    return TEMP
