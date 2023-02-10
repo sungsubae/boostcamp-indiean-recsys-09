@@ -12,6 +12,6 @@ RUN pip install --upgrade pip \
 
 WORKDIR /steamrec
 
-EXPOSE 8001
+EXPOSE 8000
 CMD ["sh", "start.sh"]
 
