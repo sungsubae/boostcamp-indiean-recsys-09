@@ -7,8 +7,6 @@ from typing import List, Union, Optional, Dict, Any
 from datetime import datetime
 from pandas import DataFrame
 
-from ml.Inference import inference
-from ml.model import NeuMF, get_model
 
 from ml.ease import dataload, get_user, inference, EASE
 
@@ -45,35 +43,12 @@ class inferenceSteamProduct(Product):
 ############# Inferenece 서버 구축###########
 # orders = [] #  DB 수정 필요
 
-@app.post("/recomNeu", description = "로그인 정보 요청합니다.")
-async def make_order(input: RecSteamProduct,
-                                    model: NeuMF=Depends(get_model)):  # model, config 정의 필요, load_model 필요
-    products = []
-    # TODO 1: Recommend List
-    gameid_list = inference(model)
-    # input 인자 이와 같이 명시해줘야 함
-    product = inferenceSteamProduct(gameid_list = gameid_list)
-    products.append(product)
-    
-    new_order = Order(products=products)
-    
-    return new_order
-
-# flow : dataload, get_user, train_predict
-# dataload : key.json file path
-# get_user : input.userid, input.playtime_forever, input.gameid_list
-# inference : 
-
 @app.post("/recom", description = "로그인 정보 요청합니다.")
 async def make_order(input: RecSteamProduct,
                                     ):  # model, config 정의 필요, load_model 필요
     products = []
     # TODO 1: Recommend List
     train, games = dataload()
-    print(input)
-    print(type(input.userid))
-    print(type(input.playtime_forever))
-    print(type(input.gameid_list))
     test = get_user(input.userid, input.playtime_forever, input.gameid_list)
     gameid_list = inference(train, test, games, EASE())
     # input 인자 이와 같이 명시
